@@ -1,0 +1,61 @@
+/* Styles pour la page de contact */
+.contact-page {
+    max-width: 600px; /* Limite la largeur du formulaire pour éviter qu'il ne s'étende sur tout l'écran */
+    margin: 0 auto; /* Centre le formulaire horizontalement */
+    padding: 20px;
+    background-color: #f9f9f9; /* Arrière-plan léger pour faire ressortir le formulaire */
+    border-radius: 8px; /* Coins arrondis pour un aspect moderne */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Ombre légère pour donner de la profondeur */
+}
+
+.contact-page h2 {
+    text-align: center; /* Centre le titre du formulaire */
+    margin-bottom: 20px;
+    color: #333; /* Couleur du texte pour une bonne lisibilité */
+}
+
+.contact-page p {
+    text-align: center; /* Centre le texte d'introduction */
+    margin-bottom: 20px;
+    color: #666; /* Couleur du texte pour plus de contraste */
+}
+
+.form-group {
+    margin-bottom: 15px; /* Espace entre les champs du formulaire */
+}
+
+.form-group label {
+    display: block; /* Affiche les labels sur une nouvelle ligne */
+    margin-bottom: 5px; /* Espace sous le label */
+    font-weight: bold; /* Met le label en gras pour le rendre plus visible */
+    color: #333; /* Couleur du texte du label */
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%; /* Occupe toute la largeur de la colonne */
+    padding: 10px; /* Ajoute de l'espace intérieur */
+    border: 1px solid #ddd; /* Bordure légère autour des champs */
+    border-radius: 4px; /* Coins arrondis des champs de saisie */
+    box-sizing: border-box; /* Inclut le padding dans la largeur totale */
+    font-size: 16px; /* Taille du texte dans les champs */
+}
+
+.form-group textarea {
+    resize: vertical; /* Permet à l'utilisateur de redimensionner le textarea verticalement */
+}
+
+button {
+    background-color: #007bff; /* Couleur de fond du bouton */
+    color: white; /* Couleur du texte du bouton */
+    border: none; /* Supprime les bordures par défaut */
+    padding: 10px 20px; /* Espace intérieur du bouton */
+    border-radius: 4px; /* Coins arrondis du bouton */
+    cursor: pointer; /* Change le curseur lorsqu'on survole le bouton */
+    font-size: 16px; /* Taille du texte dans le bouton */
+    transition: background-color 0.3s; /* Effet de transition lors du survol */
+}
+
+button:hover {
+    background-color: #0056b3; /* Couleur de fond du bouton au survol */
+}

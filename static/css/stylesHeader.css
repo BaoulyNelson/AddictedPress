@@ -1,0 +1,46 @@
+.top-header {
+    background-color: #102f4e;
+    color: white;
+    display: flex;
+    justify-content: center; /* Centrer sur les grands écrans par défaut */
+    align-items: center;
+    padding: 5px 20px;
+    overflow-x: hidden;
+  
+
+}
+
+.top-nav {
+    display: flex;
+}
+
+.top-nav a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+/* Alignement à droite sur les petits écrans */
+@media (max-width: 768px) {
+    .top-header {
+        justify-content: flex-start; /* Aligne les liens à droite */
+    }
+}
+
+
+.date-time {
+    margin-left: auto; /* Pousse .date-time à l'extrémité droite */
+    color: yellow;
+    position: absolute; /* Permet de positionner l'élément à un endroit spécifique */
+    right: 0; /* Positionne l'élément à droite */
+    font-size: 12px;
+  
+}
+
+
+header {
+    background-color: #227dea;
+    color: white;
+    overflow-x: hidden;
+}
+

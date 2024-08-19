@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}addictedpress.com{% endblock %}</title>
+    {% load static %}
+
+    <!-- Balises Meta Open Graph -->
+    <meta property="og:title" content="{% block og_title %}addictedpress.com{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Découvrez les derniers articles sur addictedpress.com{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% static 'images/default-og-image.jpg' %}{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    <meta property="og:type" content="website">
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/stylesHeader.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/stylesNavbar.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/stylesPanneau.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/stylesRecherche.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/stylesContact.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/stylesArticles.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/stylesDashboard.css' %}" />
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon" />
+</head>
+
+  <body>
+    <!-- Inclusion du header -->
+    {% include "partials/header.html" %}
+
+    <!-- Main Content Block -->
+    <div class="container">
+      <main>
+        {% block content %}
+        <!-- Le contenu spécifique aux pages sera inséré ici -->
+        {% endblock %}
+      </main>
+    </div>
+
+    <!-- Section d'inscription à la newsletter -->
+    <div class="newsletter" style="background-color: #ff5722; padding: 40px; text-align: center; margin-top: 50px;">
+      <h2 style="color: #fff;">Inscrivez-vous à notre Newsletter</h2>
+      <p style="color: #fff;">Recevez les dernières nouvelles et mises à jour directement dans votre boîte mail.</p>
+      <form action="#" method="post" style="max-width: 500px; margin: 0 auto;">
+          <div class="form-group" style="display: flex; justify-content: center;">
+              <input type="email" class="form-control" placeholder="Votre email" style="margin-right: 10px; flex: 1;">
+              <button type="submit" class="btn btn-light">S'inscrire</button>
+          </div>
+      </form>
+  </div>
+</div>
+    <!-- Inclusion du footer -->
+    {% include "partials/footer.html" %}
+
+    <!-- JavaScript Files -->
+    <script src="{% static 'js/scriptPanneau.js' %}"></script>
+    <script src="{% static 'js/scriptRecherche.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>

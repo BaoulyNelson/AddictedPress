@@ -1,0 +1,58 @@
+/* Modifier la couleur de fond de l'en-tête */
+#header {
+    background-color: #343a40;
+}
+
+/* Modifier la couleur du texte du titre et du logo */
+#header h1 a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Modifier la couleur des liens de l'interface admin */
+a {
+    color: #007bff;
+}
+
+/* Modifier la couleur de fond des boutons */
+button, input[type="submit"], input[type="button"] {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #ffffff;
+}
+
+/* Modifier la couleur des liens de la barre latérale */
+#nav-sidebar .nav-sidebar {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+#nav-sidebar .nav-sidebar a {
+    color: #ffffff;
+}
+
+/* Ajouter un effet au survol des liens */
+a:hover {
+    color: #0056b3;
+}
+
+/* Personnaliser la page de connexion */
+body.login {
+    background-color: #f8f9fa;
+}
+
+body.login .submit-row input {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+/* Modifier les bordures des champs de formulaire */
+input[type="text"], input[type="password"], select {
+    border: 1px solid #ced4da;
+}
+
+/* Personnaliser le style des messages d'erreur */
+.errornote {
+    color: #dc3545;
+    font-weight: bold;
+}

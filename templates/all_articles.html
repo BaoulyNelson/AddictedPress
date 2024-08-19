@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Explorez nos Articles - addictedpress.com{% endblock %}
+
+{% block content %}
+<div class="all-articles-container">
+    <h1>Explorez nos Articles</h1>
+
+    {% if articles %}
+        <div class="articles-list">
+            {% for article in articles %}
+                <div class="article-summary">
+                    <h2><a href="{% url 'article_detail' article.id %}">{{ article.title }}</a></h2>
+                 
+                    
+                    {% if article.image %}
+                        <img src="{{ article.image.url }}" alt="{{ article.title }}" class="article-thumbnail">
+                    {% elif article.image_url %}
+                        <img src="{{ article.image_url }}" alt="{{ article.title }}" class="article-thumbnail">
+                    {% endif %}
+                    <p class="published-date">Publié le {{ article.published_date|date:"d/m/Y H:i" }}</p>
+                    <p>{{ article.description|truncatewords:30 }}</p>
+                    <a href="{% url 'article_detail' article.id %}" class="read-more">Lire la suite</a>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Aucun article n'est disponible pour le moment.</p>
+    {% endif %}
+    <!-- Lien Retour à l'accueil -->
+    <a href="{% url 'index' %}" class="btn btn-secondary btn-lg" style="margin-top: 20px">Retour à l'accueil</a>
+
+</div>
+{% endblock %}

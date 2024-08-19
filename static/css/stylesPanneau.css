@@ -1,0 +1,60 @@
+/* Panneau latéral */
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: white;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    display: none; /* Masqué par défaut */
+}
+
+/* Afficher le panneau latéral seulement sur les petits écrans */
+@media (max-width: 768px) {
+    .hamburger-icon {
+        display: block;
+        cursor: pointer;
+    }
+
+    /* Afficher uniquement les éléments spécifiés */
+    .hamburger-icon,
+    .header-title-container,
+    .login {
+        display: block;
+    }
+
+    /* Masquer la navigation principale et afficher le panneau latéral */
+    .main-nav {
+        display: none;
+    }
+
+    .sidebar {
+        display: block;
+    }
+}
+
+/* Liens dans le panneau latéral */
+.sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: black;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+/* Bouton de fermeture */
+.sidebar .close-btn {
+    position: absolute;
+    top: 0;
+    right: 35px;
+    margin-left: 50px;
+}

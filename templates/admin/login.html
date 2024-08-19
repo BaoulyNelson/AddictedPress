@@ -1,0 +1,12 @@
+{% extends "admin/login.html" %}
+
+{% block title %}Connexion à l'administration AddictedPress{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Connexion AddictedPress</a></h1>
+{% endblock %}
+
+{% block login-form %}
+<!-- Tu peux personnaliser le formulaire ici -->
+{{ form.as_p }}
+{% endblock %}

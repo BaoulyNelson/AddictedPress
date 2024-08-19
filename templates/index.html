@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Page d'accueil
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Section de bienvenue -->
+     
+    <div
+    class="hero-section"
+    style="background-color: #f2f2f2; padding: 40px; text-align: center"
+  >
+    <h1 style="font-size: 2.5em; color: #ff5722">Bienvenue sur AddictedPress</h1>
+    <p style="font-size: 1.2em; color: #757575">
+      Votre source d'informations et d'articles passionnants.
+    </p>
+    
+    <a href="{% url 'all_articles' %}" class="btn btn-primary" style="margin-top: 20px">
+      Explorez nos articles
+    </a>
+  </div>
+  
+
+ 
+
+{% endblock %}

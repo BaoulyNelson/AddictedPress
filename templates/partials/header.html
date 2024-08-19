@@ -1,0 +1,68 @@
+<div class="top-header">
+  <div class="top-nav">
+    <a href="{% url 'about' %}">ÀPropos</a>
+    <a href="{% url 'contact' %}">Contact</a>
+    <a href="{% url 'testimonials' %}">Témoignages</a>
+  </div>
+  <div class="date-time" id="date-time"></div>
+</div>
+
+<header>
+  <div class="header-content">
+    <i class="fas fa-bars hamburger-icon" onclick="toggleSidebar()"></i>
+    <div class="search-icon" onclick="toggleSearch()">
+      <i class="fas fa-search"></i>
+    </div>
+    <div class="header-title-container">
+      <h1>Addicted Press</h1>
+
+      <div class="search-container" id="searchContainer">
+        <form
+          id="searchForm"
+          action="{% url 'search_by_category' %}"
+          method="get"
+        >
+          <input
+            type="search"
+            name="category"
+            id="searchInput"
+            placeholder="Rechercher par catégorie..."
+          />
+          <button type="submit" id="searchSubmit">Rechercher</button>
+        </form>
+        <div id="searchResults"></div>
+      </div>
+    </div>
+
+
+    {% if user.is_authenticated and user.is_superuser %}
+    <div class="login">
+      <a
+        href="{% url 'admin:index' %}"
+        title="Accéder à l'interface admin"
+        style="color: #fff; text-decoration: none"
+      >
+        <i class="fas fa-user" style="color: #fff"></i>
+      </a>
+    </div>
+    {% endif %}
+  </div>
+
+  <nav class="main-nav">
+    <a href="{% url 'index' %}">Accueil</a>
+    <a href="{% url 'articles_by_category' 'Actualités' %}">Actualités</a>
+    <a href="{% url 'articles_by_category' 'Annonces' %}">Annonces</a>
+    <a href="{% url 'articles_by_category' 'Culture' %}">Culture</a>
+    <a href="{% url 'articles_by_category' 'Economie' %}">Economie</a>
+    <a href="{% url 'articles_by_category' 'Sport' %}">Sport</a>
+    <a href="{% url 'articles_by_category' 'Editorial' %}">Editorial</a>
+    <a href="{% url 'articles_by_category' 'National' %}">National</a>
+    <a href="{% url 'articles_by_category' 'Opinions' %}">Opinions</a>
+    <a href="{% url 'articles_by_category' 'Société' %}">Société</a>
+  </nav>
+</header>
+
+<div class="sidebar" id="sidebar">
+  <a href="#" class="close-btn" onclick="toggleSidebar()">&times;</a>
+  <!-- Les liens seront insérés ici dynamiquement -->
+</div>
