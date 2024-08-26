@@ -17,21 +17,28 @@
 {% block og_url %}{{ request.build_absolute_uri }}{% endblock %}
 
 {% block content %}
-<article>
+<article class="article-detail">
     <h1>{{ article.title }}</h1>
     
-    {% if article.image %}
-        <img src="{{ article.image.url }}" alt="{{ article.title }}" class="article-image">
-    {% elif article.image_url %}
-        <img src="{{ article.image_url }}" alt="{{ article.title }}" class="article-image">
-    {% endif %}
-    
+    <div class="article-header">
+        {% if article.image %}
+            <div class="article-image-container">
+                <img src="{{ article.image.url }}" alt="{{ article.title }}" class="article-image">
+            </div>
+        {% elif article.image_url %}
+            <div class="article-image-container">
+                <img src="{{ article.image_url }}" alt="{{ article.title }}" class="article-image">
+            </div>
+        {% endif %}
+
+        <div class="article-meta">
+            <p>Publié le {{ article.published_date|date:"d/m/Y H:i" }}{% if article.author %} par {{ article.author.username }}{% endif %}</p>
+        </div>
+    </div>
+
     <div class="article-content">
         {{ article.content|safe }}
     </div>
-
-    <!-- Date de publication et auteur après le contenu -->
-    <p class="article-meta">Publié le {{ article.published_date|date:"d/m/Y H:i" }}{% if article.author %} par {{ article.author.username }}{% endif %}</p>
 
     <!-- Lien de retour -->
     <a href="{% url 'articles_by_category' article.category %}" class="btn-back">Retour à la catégorie</a>

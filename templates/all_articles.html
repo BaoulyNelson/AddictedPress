@@ -10,17 +10,21 @@
         <div class="articles-list">
             {% for article in articles %}
                 <div class="article-summary">
-                    <h2><a href="{% url 'article_detail' article.id %}">{{ article.title }}</a></h2>
-                 
-                    
                     {% if article.image %}
-                        <img src="{{ article.image.url }}" alt="{{ article.title }}" class="article-thumbnail">
+                        <div class="article-image-container">
+                            <img src="{{ article.image.url }}" alt="{{ article.title }}" class="article-thumbnail">
+                        </div>
                     {% elif article.image_url %}
-                        <img src="{{ article.image_url }}" alt="{{ article.title }}" class="article-thumbnail">
+                        <div class="article-image-container">
+                            <img src="{{ article.image_url }}" alt="{{ article.title }}" class="article-thumbnail">
+                        </div>
                     {% endif %}
-                    <p class="published-date">Publié le {{ article.published_date|date:"d/m/Y H:i" }}</p>
-                    <p>{{ article.description|truncatewords:30 }}</p>
-                    <a href="{% url 'article_detail' article.id %}" class="read-more">Lire la suite</a>
+                    <div class="article-details">
+                        <h2><a href="{% url 'article_detail' article.id %}">{{ article.title }}</a></h2>
+                        <p class="published-date">Publié le {{ article.published_date|date:"d/m/Y H:i" }}</p>
+                        <p>{{ article.description|truncatewords:30 }}</p>
+                        <a href="{% url 'article_detail' article.id %}" class="read-more">Lire la suite</a>
+                    </div>
                 </div>
             {% endfor %}
         </div>

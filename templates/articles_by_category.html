@@ -6,14 +6,21 @@
     <h1 class="category-title">Articles dans la catégorie "{{ category }}"</h1>
 
     {% if articles %}
-        <ul class="article-list">
+        <div class="article-grid">
             {% for article in articles %}
-                <li class="article-item">
-                    <a href="{% url 'article_detail' article.id %}" class="article-link">{{ article.title }}</a>
-                    <p class="article-date">{{ article.published_date|date:"d/m/Y H:i" }}</p>
-                </li>
+                <div class="article-item">
+                    <a href="{% url 'article_detail' article.id %}" class="article-link">
+                        <div class="article-image-container">
+                            <img src="{{ article.image.url }}" alt="{{ article.title }}" class="article-image">
+                        </div>
+                        <div class="article-details">
+                            <h2 class="article-title">{{ article.title }}</h2>
+                            <p class="article-date">{{ article.published_date|date:"d/m/Y H:i" }}</p>
+                        </div>
+                    </a>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
     {% else %}
         <p class="no-articles">Aucun article trouvé dans cette catégorie.</p>
     {% endif %}
