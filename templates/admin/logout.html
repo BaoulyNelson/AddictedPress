@@ -1,0 +1,11 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>Déconnexion</h1>
+<p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
+<form method="post" action="{% url 'admin:logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Déconnexion</button>
+    <a href="{% url 'admin:index' %}" class="btn btn-secondary">Annuler</a>
+</form>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Inscription à l'administration AddictedPress{% endblock %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/register.css' %}">
+
+{% block content %}
+<div id="register-form-container">
+    <h1>Inscription AddictedPress</h1>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">S'inscrire</button>
+    </form>
+    <p>Déjà un compte ? <a href="{% url 'login' %}">Connectez-vous ici</a></p>
+</div>
+{% endblock %}

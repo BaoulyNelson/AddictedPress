@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Voir le nombre d'Articles</h1>
+    <h1 class="text-center mb-4">Tableau de Bord Administrateur</h1>
 
     <div class="row">
         <!-- Carte pour le nombre total d'articles publiés -->
@@ -41,6 +41,33 @@
                 <div class="card-header">Total des Témoignages</div>
                 <div class="card-body">
                     <h5 class="card-title">{{ total_testimonials }}</h5>
+                </div>
+            </div>
+        </div>
+
+        <!-- Carte pour le nombre total d'utilisateurs -->
+        <div class="col-md-4">
+            <div class="card text-white bg-warning mb-3">
+                <div class="card-header">Total des Utilisateurs</div>
+                <div class="card-body">
+                    <h2 class="card-title">{{ total_users }}</h2>
+                    <p class="card-text">utilisateurs inscrits sur le site.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liste des utilisateurs -->
+        <div class="col-md-12 mt-4">
+            <div class="card">
+                <div class="card-header">Liste des Utilisateurs</div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for user in users %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ user.get_full_name|default:user.username }}
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
         </div>

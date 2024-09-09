@@ -1,8 +1,10 @@
 {% extends "admin/base.html" %}
+
 {% load static %}
 {% block extrastyle %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'admin/css/custom_admin.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/register.css' %}">
+
 
 <link rel="icon" href="{% static 'images/logo.jpg' %}" type="image/jpeg">
 
@@ -11,7 +13,10 @@
 {% block title %}Administration AddictedPress{% endblock %}
 
 {% block branding %}
-<h1 id="site-name"><a href="{% url 'admin:index' %}">AddictedPress Admin</a></h1>
+
+<h1 id="site-name"><a href="{% url 'admin_dashboard' %}">AddictedPress Dashboard</a></h1>
+
 {% endblock %}
+<li><a href="{% url 'admin_logout' %}">Se déconnecter</a></li>
 
 {% block nav-global %}{% endblock %}

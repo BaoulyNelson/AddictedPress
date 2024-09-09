@@ -17,21 +17,18 @@
       <h1>Addicted Press</h1>
 
       <div class="search-container" id="searchContainer">
-        <form
-          id="searchForm"
-          action="{% url 'search_by_category' %}"
-          method="get"
-        >
-          <input
-            type="search"
-            name="category"
-            id="searchInput"
-            placeholder="Rechercher par catégorie..."
-          />
-          <button type="submit" id="searchSubmit">Rechercher</button>
+        <form id="searchForm" action="{% url 'search_by_category' %}" method="get">
+            <input
+              type="search"
+              name="q"
+              id="searchInput"
+              placeholder="Rechercher par catégorie..."
+            />
+            <button type="submit" id="searchSubmit">Rechercher</button>
         </form>
         <div id="searchResults"></div>
-      </div>
+    </div>
+    
     </div>
 
 

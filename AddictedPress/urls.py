@@ -18,18 +18,17 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from Journal.views import admin_dashboard
+from Journal.views import admin_dashboard, login, register, custom_logout
 
 urlpatterns = [
-   path('admin/', admin.site.urls),
-   path('journal/', include('Journal.urls')),  # Chemin pour l'application Journal
-   path('', include('Journal.urls')),  # Ajouter ce chemin pour la racine
-   path('admin_dashboard/', admin_dashboard, name='admin_dashboard'),
-   
-  
-    
+    path('admin/', admin.site.urls),  # URL pour l'administration Django
+    path('journal/', include('Journal.urls')),  # URL pour l'application Journal
+    path('', include('Journal.urls')),  # URL pour la racine (page d'accueil)
+    path('admin_dashboard/', admin_dashboard, name='admin_dashboard'),  # URL pour le tableau de bord
+    path('login/', login, name='login'),  # URL pour la connexion
+    path('admin/logout/', custom_logout, name='admin_logout'),  # URL pour la déconnexion
+    path('register/', register, name='register'),  # URL pour l'inscription
 ]
-
 # Ajouter la configuration pour les fichiers médias en développement
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

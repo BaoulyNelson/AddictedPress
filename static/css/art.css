@@ -17,6 +17,8 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .article-image-container {
@@ -62,7 +64,6 @@
     }
 
     .article-item {
-        display: flex;
         flex-direction: row;
         align-items: center;
         gap: 10px;
@@ -70,11 +71,10 @@
 
     .article-image-container {
         flex-shrink: 0;
-        width: 150px; /* Ajustez la largeur selon vos besoins */
     }
 
     .article-image {
-        width: 100%;
+        width: 150px; /* Ajustez la largeur selon vos besoins */
         height: auto;
     }
 
@@ -85,7 +85,6 @@
 
     .article-title {
         font-size: 16px;
-        margin-bottom: 5px;
     }
 
     .article-date {

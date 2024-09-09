@@ -7,7 +7,8 @@
 
 .articles-list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 colonnes pour les grands écrans */
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 colonnes pour les grands écrans */
     gap: 20px;
 }
 
@@ -61,7 +62,8 @@
     }
 
     .article-summary {
-        flex-direction: row; /* Image à gauche, texte à droite */
+        flex-direction: row;
+        /* Image à gauche, texte à droite */
         text-align: left;
         padding: 10px 0;
         border-bottom: 1px solid #ddd;

@@ -1,7 +1,7 @@
 /* Conteneur du formulaire de recherche */
 .search-container {
-    display: none;
-    position: relative;
+    display: none; /* Masquer par défaut */
+    justify-content: center; /* Centre le formulaire horizontalement */
     margin-top: 10px;
 }
 
@@ -9,8 +9,8 @@
 #searchForm {
     display: flex;
     align-items: center;
+    justify-content: center; /* Centre les éléments enfants horizontalement */
 }
-
 
 /* Champ de saisie */
 .search-container input[type="search"] {

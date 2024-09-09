@@ -16,6 +16,7 @@
                         <div class="article-details">
                             <h2 class="article-title">{{ article.title }}</h2>
                             <p class="article-date">{{ article.published_date|date:"d/m/Y H:i" }}</p>
+                            <p>{{ article.description|truncatewords:30 }}</p>
                         </div>
                     </a>
                 </div>
