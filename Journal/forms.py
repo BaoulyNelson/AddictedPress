@@ -1,6 +1,5 @@
 from django import forms
 from .models import Testimonial
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 
@@ -14,12 +13,16 @@ class TestimonialForm(forms.ModelForm):
 
 
 
-
-class CustomUserCreationForm(UserCreationForm):
-    email = forms.EmailField(required=True)  # Champ email obligatoire
-    first_name = forms.CharField(max_length=30, required=True)  # Prénom obligatoire
-    last_name = forms.CharField(max_length=30, required=True)  # Nom obligatoire
-
+# Formulaire pour mettre à jour le profil de l'utilisateur
+class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
+        fields = ['first_name', 'last_name', 'email']
+        from django import forms
+
+
+class ContactForm(forms.Form):
+    name = forms.CharField(label="Nom", max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    message = forms.CharField(label="Message", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4}))
+

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ article.title }} - addictedpress.com{% endblock %}
+
+{% block og_title %}{{ article.title }}{% endblock %}
+{% block og_description %}{{ article.description|default:"Découvrez cet article passionnant sur addictedpress.com" }}{% endblock %}
+{% block og_image %}
+    {% if article.image %}
+        {{ article.image.url }}
+    {% elif article.image_url %}
+        {{ article.image_url }}
+    {% else %}
+        {% static 'images/logo.jpg' %}
+    {% endif %}
+{% endblock %}
+{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row">
+    <!-- Colonne principale pour l'article -->
+    <div class="col-md-8">
+      <h1 class="text-center fw-bold display-4">{{ article.title }}</h1>
+
+      <!-- Image de l'article -->
+      {% if article.image %}
+        <div class="card mx-auto mb-4">
+          <img src="{{ article.image.url }}" alt="{{ article.title }}" 
+               class="card-img-top w-100" style="max-height: 400px; object-fit: cover;">
+        </div>
+      {% elif article.image_url %}
+        <div class="card mx-auto mb-4">
+          <img src="{{ article.image_url }}" alt="{{ article.title }}" 
+               class="card-img-top w-100" style="max-height: 400px; object-fit: cover;">
+        </div>
+      {% endif %}
+
+      <!-- Contenu de l'article -->
+      <div class="article-content my-4">
+        <p class="fs-5">{{ article.content|safe }}</p>
+      </div>
+
+      <!-- Métadonnées de l'article -->
+      <small class="text-muted fw-bold fst-italic d-block mt-3">
+        Par <strong>{{ article.author }}</strong>  
+        • Publié le {{ article.published_date|date:"d M Y H:i" }}
+      </small>
+
+      <!-- Bouton retour -->
+      <div class="text-center mt-4">
+        <a href="{% url 'articles_by_category' article.category %}" class="btn btn-primary rounded-pill px-4">
+          Retour à la catégorie
+        </a>
+      </div>
+
+      <!-- Séparateur -->
+      <hr class="article-separator">
+    </div>
+
+    <!-- Colonne latérale : Articles recommandés -->
+<div class="col-md-4">
+  <h4 class="text-primary">Lire également</h4>
+
+  {% if recommended_articles %}
+    <ul class="list-unstyled">
+      {% for recommended_article in recommended_articles %}
+        <li class="d-flex align-items-center mb-3 border-bottom pb-2">
+          <span class="me-2 text-primary fw-bold">{{ forloop.counter }}.</span>
+
+          <!-- Image de l'article -->
+          {% if recommended_article.image %}
+            <img src="{{ recommended_article.image.url }}" alt="{{ recommended_article.title }}" 
+                 width="50" height="50" class="me-2 rounded">
+          {% elif recommended_article.image_url %}
+            <img src="{{ recommended_article.image_url }}" alt="{{ recommended_article.title }}" 
+                 width="50" height="50" class="me-2 rounded">
+          {% else %}
+            <img src="{% static 'images/default.jpg' %}" alt="Image par défaut" 
+                 width="50" height="50" class="me-2 rounded">
+          {% endif %}
+
+          <!-- Lien vers l'article -->
+          <a href="{% url 'article_detail' recommended_article.id %}" 
+             class="text-decoration-none text-dark fw-semibold hover-underline">
+            {{ recommended_article.title }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="text-muted">Aucun article recommandé pour le moment.</p>
+  {% endif %}
+</div>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Titre de la page avec une bordure et une couleur -->
+    <h1 class="text-center fw-bold mb-4 border-bottom border-primary pb-2">
+        Articles dans la catégorie "{{ category.name }}"
+    </h1>
+    
+
+    {% if articles %}
+    <div class="row">
+        {% for article in articles %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-light rounded">
+                <div class="card-body">
+                    <!-- Titre de l'article -->
+                    <h5 class="card-title text-primary">{{ article.title }}</h5>
+                    <!-- Date de publication -->
+                    <p class="card-text text-muted">{{ article.published_date|date:"d/m/Y H:i" }}</p>
+                    <!-- Lien vers l'article détaillé -->
+                    <a href="{% url 'article_detail' article.id %}" class="btn btn-outline-primary btn-sm">Lire l'article</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center" role="alert">
+        Aucun article trouvé dans cette catégorie.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

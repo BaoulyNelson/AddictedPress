@@ -34,6 +34,7 @@ main {
 
 
 
+
 /* Style pour la section de la page À Propos */
 .about-page {
     background-color: #f8f9fa; /* Couleur de fond douce et légère */
@@ -70,3 +71,6 @@ main {
 .about-page a:hover {
     color: #0056b3; /* Couleur des liens au survol */
 }
+
+
+

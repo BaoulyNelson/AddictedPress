@@ -1,3 +1,8 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/header.css' %}">
+<script src="{% static 'js/header.js' %}" defer></script>
+
 <div class="top-header">
   <div class="top-nav">
     <a href="{% url 'about' %}">ÀPropos</a>
@@ -12,43 +17,54 @@
     <i class="fas fa-bars hamburger-icon" onclick="toggleSidebar()"></i>
     <div class="search-icon" onclick="toggleSearch()">
       <i class="fas fa-search"></i>
-    </div>
+  </div>
+  
+  
+    
     <div class="header-title-container">
       <h1>Addicted Press</h1>
-
-      <div class="search-container" id="searchContainer">
-        <form id="searchForm" action="{% url 'search_by_category' %}" method="get">
-            <input
-              type="search"
-              name="q"
-              id="searchInput"
-              placeholder="Rechercher par catégorie..."
-            />
-            <button type="submit" id="searchSubmit">Rechercher</button>
-        </form>
-        <div id="searchResults"></div>
-    </div>
-    
     </div>
 
 
-    {% if user.is_authenticated and user.is_superuser %}
-    <div class="login">
-      <a
-        href="{% url 'admin:index' %}"
-        title="Accéder à l'interface admin"
-        style="color: #fff; text-decoration: none"
-      >
-        <i class="fas fa-user" style="color: #fff"></i>
-      </a>
-    </div>
+    {% if user.is_authenticated %}
+    {% if user.is_superuser %}
+        <!-- Interface pour les superutilisateurs (administrateurs) -->
+        <div class="login">
+            <a href="{% url 'admin:index' %}" title="Accéder à l'interface admin" style="color: #fff; text-decoration: none">
+                <i class="fas fa-user" style="color: #fff"></i> 
+            </a>
+        </div>
+    {% else %}
+        <!-- Interface pour les utilisateurs connectés (non admin) -->
+        <div class="login">
+            <a href="{% url 'user_profile' %}" title="Voir votre profil" style="color: #fff; text-decoration: none">
+                <i class="fas fa-user-circle" style="color: #fff"></i> 
+            </a>
+        </div>
     {% endif %}
+{% else %}
+    <!-- Interface pour les utilisateurs non authentifiés -->
+    <div class="login">
+        <a href="{% url 'login' %}" title="Connexion" style="color: #fff; text-decoration: none">
+            <i class="fas fa-user-plus" style="color: #fff"></i> 
+        </a>
+    </div>
+{% endif %}
+
+
   </div>
+<!-- Formulaire de recherche (initialement caché) -->
+<div class="search-container" id="searchContainer" style="display: none;">
+  <form id="searchForm" action="{% url 'search_by_category' %}" method="get">
+      <input type="search" name="q" id="searchInput" placeholder="Rechercher par catégorie...">
+      <button type="submit" id="searchSubmit">Rechercher</button>
+  </form>
+  <div id="searchResults"></div>
+</div>
 
   <nav class="main-nav">
     <a href="{% url 'index' %}">Accueil</a>
-    <a href="{% url 'articles_by_category' 'Actualités' %}">Actualités</a>
-    <a href="{% url 'articles_by_category' 'Annonces' %}">Annonces</a>
+
     <a href="{% url 'articles_by_category' 'Culture' %}">Culture</a>
     <a href="{% url 'articles_by_category' 'Economie' %}">Economie</a>
     <a href="{% url 'articles_by_category' 'Sport' %}">Sport</a>

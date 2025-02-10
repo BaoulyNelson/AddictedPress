@@ -1,33 +1,48 @@
 <!-- Footer -->
-<footer style="background-color:#333; color:#fff; padding:20px 0;">
-    <div style="text-align:center;">
-      <!-- Social Media Links -->
-      <div style="margin-bottom:15px;">
-        <a href="https://www.facebook.com" target="_blank" style="margin:0 10px; color:#fff;">
-          <i class="fab fa-facebook-f"></i> Facebook
-        </a>
-        <a href="https://www.twitter.com" target="_blank" style="margin:0 10px; color:#fff;">
-          <i class="fab fa-twitter"></i> Twitter
-        </a>
-        <a href="https://www.instagram.com" target="_blank" style="margin:0 10px; color:#fff;">
-          <i class="fab fa-instagram"></i> Instagram
-        </a>
-        <a href="https://www.linkedin.com" target="_blank" style="margin:0 10px; color:#fff;">
-          <i class="fab fa-linkedin-in"></i> LinkedIn
-        </a>
-      </div>
+<footer class="bg-dark text-white py-4">
+    <div class="container">
+      <div class="row text-center text-md-start">
+        <!-- Social Media Links -->
+        <div class="col-md-4 mb-3">
+          <h5>Suivez-nous</h5>
+          <a href="https://www.facebook.com" target="_blank" class="text-white me-3">
+            <i class="fab fa-facebook-f"></i> Facebook
+          </a>
+          <a href="https://www.twitter.com" target="_blank" class="text-white me-3">
+            <i class="fab fa-twitter"></i> Twitter
+          </a>
+          <a href="https://www.instagram.com" target="_blank" class="text-white me-3">
+            <i class="fab fa-instagram"></i> Instagram
+          </a>
+          <a href="https://www.linkedin.com" target="_blank" class="text-white">
+            <i class="fab fa-linkedin-in"></i> LinkedIn
+          </a>
+        </div>
   
-      <!-- Contact Info -->
-      <div style="margin-bottom:15px;">
-        <p>Email: <a href="mailto:elconquistadorbaoulyn@gmail.com" style="color:#fff;">elconquistadorbaoulyn@gmail.com</a></p>
-        <p>Téléphone: <a href="tel:+33123456789" style="color:#fff;">+509 44521822</a></p>
-        <p>Adresse: 123 Rue Albin, 75000 Pelerin, Haiti</p>
-      </div>
+        <!-- Contact Info -->
+        <div class="col-md-4 mb-3">
+          <h5>Contact</h5>
+          <p>Email: <a href="mailto:elconquistadorbaoulyn@gmail.com" class="text-white">elconquistadorbaoulyn@gmail.com</a></p>
+          <p>Téléphone: <a href="tel:+50944521822" class="text-white">+509 44521822</a></p>
+          <p>Adresse: 123 Rue Albin, 75000 Pelerin, Haiti</p>
+        </div>
   
-      <!-- Copyright -->
-      <div>
-        <p>&copy; 2024 AddictedPress. Tous droits réservés.</p>
+        <!-- Copyright -->
+        <div class="col-md-4 text-md-end">
+          <h5>Informations</h5>
+          <p class="mb-0">&copy; <span id="year"></span> AddictedPress. Tous droits réservés.</p>
+          <p><a href="/privacy" class="text-white">Politique de confidentialité</a></p>
+        </div>
       </div>
     </div>
+  
+    <!-- Copyright Bottom -->
+    <div class="bg-secondary text-center py-2 mt-3">
+      <p class="mb-0">Développé  par Baouly Nelson</p>
+    </div>
+  
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
   </footer>
   

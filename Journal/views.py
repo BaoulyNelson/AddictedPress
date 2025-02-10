@@ -1,57 +1,177 @@
 # views.py
 from django.shortcuts import render, get_object_or_404
 from .models import Article,Testimonial
-from django.db.models import Count
-from django.contrib.auth.models import User
-
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
-from django.conf import settings
-from django.http import HttpResponse
 from django.db.models import Q
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login,authenticate
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
+from .forms import TestimonialForm,ProfileForm ,ContactForm # Assurez-vous d'utiliser le bon formulaire
+from django.core.paginator import Paginator
+from django.shortcuts import render, redirect
+from django.contrib.auth import login 
 from django.contrib import messages
-from .forms import CustomUserCreationForm  # Assurez-vous d'utiliser le bon formulaire
+from django.contrib.messages import get_messages
+
+@login_required
+def profile(request):
+    return render(request, 'comptes/profile.html', {'user': request.user})
 
 
-from .forms import TestimonialForm
-from django.contrib.auth import logout
-from django.urls import reverse
-from django.contrib.auth.forms import UserCreationForm
-from .forms import CustomUserCreationForm
-from django.contrib.auth.views import LoginView
+
+def login_view(request):
+    # Supprime les anciens messages avant d'afficher un nouveau
+    storage = get_messages(request)
+    for _ in storage:
+        pass  # Cette boucle vide supprime tous les anciens messages
+
+    if request.method == "POST":
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+            user = authenticate(request, username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                messages.success(request, f"Bienvenue {username} ! 😊 Vous êtes connecté.")
+
+                if request.POST.get("remember_me"):
+                    request.session.set_expiry(1209600)  # 2 semaines
+
+                return redirect("user_profile")
+            else:
+                messages.error(request, "Nom d'utilisateur ou mot de passe incorrect.")
+        else:
+            messages.error(request, "Veuillez vérifier vos informations.")
+    else:
+        form = AuthenticationForm()
+
+    return render(request, "comptes/login.html", {"form": form})
+
+
+def signup_view(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Inscription réussie ! 🎉 Bienvenue sur notre plateforme.")
+            return redirect("index")  # Redirection après succès
+        else:
+            messages.error(request, "Une erreur est survenue lors de l'inscription. Vérifiez les informations.")
+    else:
+        form = UserCreationForm()
+
+    return render(request, "comptes/signup.html", {"form": form})
+
+
+
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('index')  # Redirige vers la page d'accueil ou une autre page après la mise à jour
+    else:
+        form = ProfileForm(instance=request.user)
+    
+    return render(request, 'comptes/edit_profile.html', {'form': form})
+
+
+
 
 
 
 
 def index(request):
-    return render(request, 'index.html')
+    # Articles par catégorie
+    actualites_articles = Article.objects.filter(category='actualites').order_by('-published_date')[:5]
+    annonces_articles = Article.objects.filter(category='annonces').order_by('-published_date')[:5]
+    
+    # Articles confondus (sauf actualités et annonces) avec pagination
+    all_articles_list = Article.objects.exclude(category__in=['actualites', 'annonces']).order_by('-published_date')
+    paginator = Paginator(all_articles_list, 5)  # 5 articles par page
+    page_number = request.GET.get('page')
+    articles = paginator.get_page(page_number)
+
+    # Passer toutes les données au template
+    context = {
+        'actualites_articles': actualites_articles,
+        'annonces_articles': annonces_articles,
+        'articles': articles,  # Articles paginés
+    }
+    
+    return render(request, 'index.html', context)
+
+
 
 def about(request):
     return render(request, 'about.html')
 
-def contact(request):
-    return render(request, 'contact.html')
+
+
+def contact_view(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            email = form.cleaned_data["email"]
+            message = form.cleaned_data["message"]
+
+            # 📩 Envoyer un email (optionnel)
+            send_mail(
+                f"Nouveau message de {name}",
+                message,
+                email,
+                ["admin@example.com"],  # Remplace avec l'email de ton admin
+                fail_silently=False,
+            )
+
+            return redirect("contact_success")  # Redirige vers une page de succès
+    else:
+        form = ContactForm()
+
+    return render(request, "contact.html", {"form": form})
+
+
+def contact_success_view(request):
+    return render(request, "contact_success.html")
+
 
 def testimonials(request):
     return render(request, 'testimonials.html')
 
 
 def articles_by_category(request, category_name):
-    # Filtrer les articles par catégorie et trier par date de publication (les plus récents en premier)
-    articles = Article.objects.filter(category=category_name).order_by('-published_date')
-    return render(request, 'articles_by_category.html', {'articles': articles, 'category': category_name})
+    articles_list = Article.objects.filter(category=category_name).order_by('-published_date')
 
-def article_detail(request, id):
-    # Obtenir l'article avec l'ID donné
+    # Pagination : 5 articles par page
+    paginator = Paginator(articles_list, 5)  
+    page_number = request.GET.get('page')
+    articles = paginator.get_page(page_number)
+
+    return render(request, 'articles/articles_by_category.html', {
+        'articles': articles,
+        'category': category_name
+    })
+    
+
+
+def article_detail(request, id):  # Modifier article_id → id
     article = get_object_or_404(Article, id=id)
-    return render(request, 'article_detail.html', {'article': article})
 
-@login_required  # Assure-toi que seuls les utilisateurs connectés peuvent accéder à cette vue
-def admin_dashboard(request):
-    return render(request, 'admin/admin_dashboard.html')
+    # Récupérer les articles recommandés
+    recommended_articles = Article.objects.filter(category=article.category).exclude(id=article.id).order_by('-published_date')[:5]
+
+    return render(request, 'articles/article_detail.html', {
+        'article': article,
+        'recommended_articles': recommended_articles
+    })
+
 
 
 def search(request):
@@ -74,30 +194,11 @@ def search(request):
         'testimonials': testimonials,
         'query': query
     }
-    return render(request, 'search_results.html', context)
+    return render(request, 'search/search_results.html', context)
 
 
-def contact(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        message = request.POST.get('message')
 
-        # Vous pouvez traiter ou sauvegarder les données ici, par exemple, les envoyer par email
-        subject = f"Message de {name} via le formulaire de contact"
-        body = f"Nom: {name}\nEmail: {email}\n\nMessage:\n{message}"
 
-        # Envoyer l'email (assurez-vous que les paramètres email sont configurés dans settings.py)
-        send_mail(subject, body, settings.DEFAULT_FROM_EMAIL, [settings.DEFAULT_FROM_EMAIL])
-
-        # Rediriger après soumission
-        return HttpResponse("Merci de nous avoir contactés. Nous vous répondrons sous peu.")
-
-    return render(request, 'contact.html')
-
-def all_articles(request):
-    articles = Article.objects.all()
-    return render(request, 'all_articles.html', {'articles': articles})
 
 def testimonials(request):
     if request.method == 'POST':
@@ -112,57 +213,6 @@ def testimonials(request):
     return render(request, 'testimonials.html', {'testimonials': testimonials, 'form': form})
 
 
-@login_required
-@user_passes_test(lambda u: u.is_staff)
-def admin_dashboard(request):
-    total_articles = Article.objects.count()
-    articles_by_category = Article.objects.values('category').annotate(total=Count('category'))
-    total_testimonials = Testimonial.objects.count()
-    total_users = User.objects.count()  # Compter le nombre total d'utilisateurs
-    users = User.objects.all()  # Obtenir tous les utilisateurs
-
-    context = {
-        'total_articles': total_articles,
-        'articles_by_category': articles_by_category,
-        'total_testimonials': total_testimonials,
-        'total_users': total_users,  # Ajouter le nombre total d'utilisateurs au contexte
-        'users': users,  # Ajouter la liste des utilisateurs au contexte
-    }
-    return render(request, 'admin_dashboard.html', context)
 
 
-def register(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            auth_login(request, user)  # Connecte automatiquement l'utilisateur après l'inscription
-            return redirect('admin_dashboard')  # Redirige directement vers le tableau de bord après inscription
-    else:
-        form = CustomUserCreationForm()
-    return render(request, 'admin/register.html', {'form': form})
 
-def login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        if username and password:
-            user = authenticate(request, username=username, password=password)
-
-            if user is not None:
-                auth_login(request, user)  # Connecte l'utilisateur
-                return redirect('admin_dashboard')  # Redirige vers le tableau de bord après connexion
-            else:
-                messages.error(request, 'Nom d\'utilisateur ou mot de passe incorrect.')
-        else:
-            messages.error(request, 'Veuillez remplir tous les champs.')
-
-    return render(request, 'admin/login.html')
-
-
-def custom_logout(request):
-    if request.method == 'POST':
-        logout(request)
-        return redirect(reverse('admin:index'))  # Redirection après déconnexion
-    return render(request, 'admin/logout.html')
