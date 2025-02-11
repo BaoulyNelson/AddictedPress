@@ -18,7 +18,9 @@
                         <div class="col-md-8 text-center text-md-start">
                             <h2 class="fw-bold text-dark">{{ article.title }}</h2>
                             <p class="text-dark">{{ article.content|truncatewords:30 }}</p>
-                            <p class="text-muted">{{ article.published_date|date:"d/m/Y" }}</p>
+                            
+                            <small>📅 {{ article.published_date|date:"d/m/Y" }}</small>
+
                             <p class="fw-bold">Par {{ article.author }}</p>
                         </div>
 

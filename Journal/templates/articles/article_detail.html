@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
 
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/recommendations.css' %}">
+{% endblock %}
+
 {% block title %}{{ article.title }} - addictedpress.com{% endblock %}
 
 {% block og_title %}{{ article.title }}{% endblock %}
