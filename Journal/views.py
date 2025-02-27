@@ -83,26 +83,19 @@ def edit_profile(request):
 
 
 
-
-
-
-
 def index(request):
-    # Articles par catégorie
-    actualites_articles = Article.objects.filter(category='actualites').order_by('-published_date')[:5]
-    annonces_articles = Article.objects.filter(category='annonces').order_by('-published_date')[:5]
+    actualites_articles = Article.objects.filter(category='actualites').order_by('-published_date')
     
-    # Articles confondus (sauf actualités et annonces) avec pagination
-    all_articles_list = Article.objects.exclude(category__in=['actualites', 'annonces']).order_by('-published_date')
-    paginator = Paginator(all_articles_list, 5)  # 5 articles par page
+    all_articles_list = Article.objects.exclude(category__in=['actualites']).order_by('-published_date')
+    print(f"Nombre d'articles paginés : {all_articles_list.count()}")  # Vérification
+
+    paginator = Paginator(all_articles_list, 5)
     page_number = request.GET.get('page')
     articles = paginator.get_page(page_number)
 
-    # Passer toutes les données au template
     context = {
         'actualites_articles': actualites_articles,
-        'annonces_articles': annonces_articles,
-        'articles': articles,  # Articles paginés
+        'articles': articles,
     }
     
     return render(request, 'index.html', context)
@@ -147,18 +140,22 @@ def testimonials(request):
 
 
 def articles_by_category(request, category_name):
+    # Récupération des articles de la catégorie
     articles_list = Article.objects.filter(category=category_name).order_by('-published_date')
 
-    # Pagination : 5 articles par page
-    paginator = Paginator(articles_list, 5)  
+    # Pagination (5 articles par page)
+    paginator = Paginator(articles_list, 5)
     page_number = request.GET.get('page')
     articles = paginator.get_page(page_number)
 
-    return render(request, 'articles/articles_by_category.html', {
+    # Contexte envoyé au template
+    context = {
         'articles': articles,
         'category': category_name
-    })
-    
+    }
+
+    return render(request, 'articles/articles_by_category.html', context)
+
 
 
 def article_detail(request, id):  # Modifier article_id → id

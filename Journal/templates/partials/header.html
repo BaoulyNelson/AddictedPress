@@ -5,10 +5,12 @@
 
 <div class="top-header">
   <div class="top-nav">
-    <a href="{% url 'about' %}">ÀPropos</a>
+    <a href="{% url 'about' %}">À Propos</a>
     <a href="{% url 'contact' %}">Contact</a>
     <a href="{% url 'testimonials' %}">Témoignages</a>
-  </div>
+    
+</div>
+
   <div class="date-time" id="date-time"></div>
 </div>
 
@@ -72,6 +74,9 @@
     <a href="{% url 'articles_by_category' 'National' %}">National</a>
     <a href="{% url 'articles_by_category' 'Opinions' %}">Opinions</a>
     <a href="{% url 'articles_by_category' 'Société' %}">Société</a>
+    
+    <a href="{% url 'articles_by_category' 'Annonces' %}">Annonces</a>
+
   </nav>
 </header>
 

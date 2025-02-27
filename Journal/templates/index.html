@@ -1,145 +1,107 @@
 {% extends "base.html" %}
+
 {% load static %}
 
 {% block title %}Page d'accueil{% endblock %}
 
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/articles.css' %}">
+{% endblock %}
+
 {% block content %}
 
+<div class="container">
+   
+    <main class="main-content">
+        <!-- ✅ Titre pour les articles en vedette -->
+        <h2 class="mb-3">Actualités principales</h2>
 
-<head>
-  
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="{% static 'css/index.css' %}">
-    <link rel="stylesheet" href="{% static 'css/actualites_index.css' %}">
-    <link rel="stylesheet" href="{% static 'css/annonces_index.css' %}">
-    <div class="welcome-container">
-       
-        <div class="welcome-message">
-            <h1>Bienvenue sur Addicted Press !</h1>
-        </div>
-    </div>
-    
-<div class="container mt-4">
-    <div class="row">
-        <!-- COLONNE GAUCHE : ACTUALITÉS -->
-        <div class="col-md-3 border-end">
-            <h2 class="text-primary text-center mb-4" style="border-bottom: 2px solid red;">Actualités</h2>
-        
-            {% if actualites_articles %}
-                <ul class="annonce-list list-unstyled">
-                    {% for article in actualites_articles %}
-                        <li class="annonce-item">
-                            <span class="annonce-rank">{{ forloop.counter }}.</span>
-                            <img src="{{ article.image.url|default:'/static/images/default.jpg' }}" 
-                                 alt="Image de {{ article.title }}" class="annonce-image">
-                            <a href="{% url 'article_detail' article.id %}" class="annonce-title">
+        {% if actualites_articles %}
+            <div class="featured-articles">
+                {% for article in actualites_articles %}
+                    <article class="featured-article">
+                        <img src="{{ article.image.url|default:'/static/images/default.jpg' }}" 
+                             alt="{{ article.title }}">
+                        <h3>
+                            <a href="{% url 'article_detail' article.id %}" class="text-decoration-none text-dark">
                                 {{ article.title }}
                             </a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p class="text-center text-muted">Aucune actualité disponible.</p>
-            {% endif %}
-        </div>
-        
-        
-
-        <!-- COLONNE CENTRALE : ARTICLES CONFONDUS (inchangé) -->
-        <div class="col-md-6 border-end">
-            <h1 class="text-center mb-4" style="border-bottom: 2px solid #FFB84D;">Explorez nos Articles</h1>
-
-            {% if articles %}
-                <div class="list-group">
-                    {% for article in articles %}
-                        <div class="list-group-item list-group-item-action py-3">
-                            <!-- Image de l'article -->
-                            {% if article.image %}
-                                <div class="mb-3 text-center">
-                                    <img src="{{ article.image.url }}" alt="{{ article.title }}" class="img-fluid rounded"
-                                         style="width: 100%; max-width: 600px; height: 250px; object-fit: cover;">
-                                </div>
-                            {% elif article.image_url %}
-                                <div class="mb-3 text-center">
-                                    <img src="{{ article.image_url }}" alt="{{ article.title }}" class="img-fluid rounded"
-                                         style="width: 100%; max-width: 600px; height: 250px; object-fit: cover;">
-                                </div>
+                        </h3>
+                        <p class="text-muted">
+                            Publié le {{ article.published_date|date:"d M Y" }}  
+                            {% if article.author %}
+                                par {{ article.author.username }}
+                            {% else %}
+                                (Auteur inconnu)
                             {% endif %}
+                        </p>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center text-muted">Aucune actualité disponible.</p>
+        {% endif %}
+    </main>
 
-                            <!-- Contenu de l'article -->
-                            <div>
-                                <h5 class="mb-1 text-center">
-                                    <a href="{% url 'article_detail' article.id %}" class="text-decoration-none text-light fw-bold">
-                                        {{ article.title }}
-                                    </a>
-                                </h5>
-                                <p class="text-muted text-center">Publié le {{ article.published_date|date:"d/m/Y H:i" }}</p>
-                                <p class="text-center">{{ article.content|truncatewords:30 }}</p>
-                                <div class="text-center">
-                                    <a href="{% url 'article_detail' article.id %}" class="btn btn-primary">Lire la suite</a>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
+    <!-- ✅ Colonne latérale -->
+    <aside class="articles-sidebar">
+        <!-- ✅ Titre pour les autres articles -->
+        <h2 class="mb-3">Autres articles</h2>
 
-                <!-- Pagination -->
-                <nav aria-label="Pagination" class="mt-4">
-                    <ul class="pagination justify-content-center">
-                        {% if articles.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page=1">&laquo; Premier</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ articles.previous_page_number }}">Précédent</a>
-                            </li>
-                        {% endif %}
-
-                        <li class="page-item disabled">
-                            <span class="page-link">Page {{ articles.number }} sur {{ articles.paginator.num_pages }}</span>
-                        </li>
-
-                        {% if articles.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ articles.next_page_number }}">Suivant</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ articles.paginator.num_pages }}">Dernier &raquo;</a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            {% else %}
-                <p class="text-center">Aucun article disponible.</p>
-            {% endif %}
-
-          
-        </div>
-
-        <!-- COLONNE DROITE : ANNONCES -->
-        <div class="col-md-3">
-            <h2 class="text-center mb-4" style="border-bottom: 2px solid blue;">Annonces</h2>
-        
-            {% if annonces_articles %}
-                <ul class="annonce-list list-unstyled">
-                    {% for article in annonces_articles %}
-                        <li class="annonce-item">
-                            <span class="annonce-rank">{{ forloop.counter }}.</span>
-                            <img src="{{ article.image.url|default:'/static/images/default.jpg' }}" 
-                                 alt="Image de {{ article.title }}" class="annonce-image">
-                            <a href="{% url 'article_detail' article.id %}" class="annonce-title">
+        {% if articles %}
+            {% for article in articles %}
+                <div class="article">
+                    <img src="{{ article.image.url|default:'/static/images/default.jpg' }}" 
+                         alt="{{ article.title }}">
+                    <div>
+                        <h3>
+                            <a href="{% url 'article_detail' article.id %}" class="text-decoration-none text-dark">
                                 {{ article.title }}
                             </a>
-                            
+                        </h3>
+                        <p class="text-muted">
+                            <b><i>Publié le {{ article.published_date|date:"d M Y" }}</i></b>  
+                            {% if article.author %}
+                                <b><i>par {{ article.author.username }}</i></b>
+                            {% else %}
+                                <b><i>(Auteur inconnu)</i></b>
+                            {% endif %}
+                        </p>
+                        
+                    </div>
+                </div>
+            {% endfor %}
+
+            <!-- ✅ Pagination -->
+            <nav aria-label="Pagination" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if articles.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">&laquo; Premier</a>
                         </li>
-                    {% endfor %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ articles.previous_page_number }}">Précédent</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item disabled">
+                        <span class="page-link">Page {{ articles.number }} sur {{ articles.paginator.num_pages }}</span>
+                    </li>
+
+                    {% if articles.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ articles.next_page_number }}">Suivant</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ articles.paginator.num_pages }}">Dernier &raquo;</a>
+                        </li>
+                    {% endif %}
                 </ul>
-            {% else %}
-                <p class="text-center text-muted">Aucune annonce.</p>
-            {% endif %}
-        </div>
-            </div>
+            </nav>
+        {% else %}
+            <p class="text-center text-muted">Aucun article disponible.</p>
+        {% endif %}
+    </aside>
 </div>
 
 {% endblock %}
