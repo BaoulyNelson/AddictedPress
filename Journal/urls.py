@@ -18,6 +18,7 @@ urlpatterns = [
     
     # Page de déconnexion
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('confirmer-deconnexion/', views.confirmer_deconnexion, name='confirmer_deconnexion'),
     # Exemple de route pour le profil de l'utilisateur
     path('accounts/profile/', views.profile, name='user_profile'),
 

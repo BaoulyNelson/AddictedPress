@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login,authenticate
+from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from .forms import TestimonialForm,ProfileForm ,ContactForm # Assurez-vous d'utiliser le bon formulaire
 from django.core.paginator import Paginator
@@ -13,6 +13,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login 
 from django.contrib import messages
 from django.contrib.messages import get_messages
+from Journal.utils import ajouter_message
+
+
+
 
 @login_required
 def profile(request):
@@ -67,6 +71,14 @@ def signup_view(request):
     return render(request, "comptes/signup.html", {"form": form})
 
 
+
+@login_required
+def confirmer_deconnexion(request):
+    if request.method == 'POST':
+        logout(request)
+        ajouter_message(request, 'success', "Vous vous êtes déconnecté avec succès.")
+        return redirect('index')
+    return render(request, 'comptes/confirmer_deconnexion.html')
 
 
 @login_required
@@ -128,15 +140,15 @@ def contact_view(request):
     else:
         form = ContactForm()
 
-    return render(request, "contact.html", {"form": form})
+    return render(request, "contact/contact.html", {"form": form})
 
 
 def contact_success_view(request):
-    return render(request, "contact_success.html")
+    return render(request, "contact/contact_success.html")
 
 
 def testimonials(request):
-    return render(request, 'testimonials.html')
+    return render(request, 'commentaires/testimonials.html')
 
 
 def articles_by_category(request, category_name):
@@ -207,7 +219,7 @@ def testimonials(request):
         form = TestimonialForm()
     
     testimonials = Testimonial.objects.all()
-    return render(request, 'testimonials.html', {'testimonials': testimonials, 'form': form})
+    return render(request, 'commentaires/testimonials.html', {'testimonials': testimonials, 'form': form})
 
 
 

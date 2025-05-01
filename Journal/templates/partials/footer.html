@@ -1,48 +1,63 @@
-<!-- Footer -->
-<footer class="bg-dark text-white py-4">
-    <div class="container">
-      <div class="row text-center text-md-start">
-        <!-- Social Media Links -->
-        <div class="col-md-4 mb-3">
-          <h5>Suivez-nous</h5>
-          <a href="https://www.facebook.com" target="_blank" class="text-white me-3">
-            <i class="fab fa-facebook-f"></i> Facebook
-          </a>
-          <a href="https://www.twitter.com" target="_blank" class="text-white me-3">
-            <i class="fab fa-twitter"></i> Twitter
-          </a>
-          <a href="https://www.instagram.com" target="_blank" class="text-white me-3">
-            <i class="fab fa-instagram"></i> Instagram
-          </a>
-          <a href="https://www.linkedin.com" target="_blank" class="text-white">
-            <i class="fab fa-linkedin-in"></i> LinkedIn
-          </a>
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+          <div class="footer-container">
+              <div class="footer-column">
+                  <h3>addictedpress.com</h3>
+                  <p>L'information qui compte, quand elle compte. Notre mission est de vous fournir une information
+                      fiable, vérifiée et accessible.</p>
+                  <div class="social-links">
+                      <a href="#"><i class="fab fa-facebook-f"></i></a>
+                      <a href="#"><i class="fab fa-twitter"></i></a>
+                      <a href="#"><i class="fab fa-instagram"></i></a>
+                      <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                      <a href="#"><i class="fab fa-youtube"></i></a>
+                  </div>
+              </div>
+
+              <div class="footer-column">
+                  <h3>Rubriques</h3>
+                  <ul class="footer-links">
+                      <li><a href="{% url 'articles_by_category' 'Culture' %}">Culture</a></li>
+                      <li><a href="{% url 'articles_by_category' 'Economie' %}">Économie</a></li>
+                      <li><a href="{% url 'articles_by_category' 'Sport' %}">Sport</a></li>
+                      <li><a href="{% url 'articles_by_category' 'Edditorial' %}">Edditorial</a></li>
+                      <li><a href="{% url 'articles_by_category' 'National' %}">National</a></li>
+                      <li><a href="{% url 'articles_by_category' 'Opinion' %}">Opinions</a></li>
+                  </ul>
+              </div>
+
+              <div class="footer-column">
+                  <h3>Services</h3>
+                  <ul class="footer-links">
+                      <li><a href="#">Application mobile</a></li>
+                      <li><a href="#">Podcasts</a></li>
+                      <li><a href="#">Newsletter</a></li>
+                      <li><a href="#">Alertes info</a></li>
+                      <li><a href="#">Flux RSS</a></li>
+                  </ul>
+              </div>
+
+              <div class="footer-column">
+                  <h3>À propos</h3>
+                  <ul class="footer-links">
+                   
+                      <li><a href="{% url 'about' %}">Notre équipe</a></li>
+                      <li><a href="{% url 'contact' %}">Nous contacter</a></li>
+                      <li><a href="{% url 'about' %}">Recrutement</a></li>
+                      <li><a href="{% url 'about' %}">Mentions légales</a></li>
+                      <li><a href="{% url 'about' %}">Politique de confidentialité</a></li>
+                  </ul>
+              </div>
+          </div>
+
+          <div class="copyright">
+            &copy; <span id="currentYear"></span> AddictedPress. Tous droits réservés.
         </div>
-  
-        <!-- Contact Info -->
-        <div class="col-md-4 mb-3">
-          <h5>Contact</h5>
-          <p>Email: <a href="mailto:elconquistadorbaoulyn@gmail.com" class="text-white">elconquistadorbaoulyn@gmail.com</a></p>
-          <p>Téléphone: <a href="tel:+50944521822" class="text-white">+509 44521822</a></p>
-          <p>Adresse: 123 Rue Albin, 75000 Pelerin, Haiti</p>
-        </div>
-  
-        <!-- Copyright -->
-        <div class="col-md-4 text-md-end">
-          <h5>Informations</h5>
-          <p class="mb-0">&copy; <span id="year"></span> AddictedPress. Tous droits réservés.</p>
-          <p><a href="/privacy" class="text-white">Politique de confidentialité</a></p>
-        </div>
+        
+        <script>
+          document.getElementById("currentYear").textContent = new Date().getFullYear();
+        </script>
+        
       </div>
-    </div>
-  
-    <!-- Copyright Bottom -->
-    <div class="bg-secondary text-center py-2 mt-3">
-      <p class="mb-0">Développé  par Baouly Nelson</p>
-    </div>
-  
-    <script>
-      document.getElementById("year").textContent = new Date().getFullYear();
-    </script>
   </footer>
-  

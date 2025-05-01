@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Section titre -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h2 class="text-primary mb-3">Témoignages</h2>
+            <p class="text-muted">Nous avons recueilli des témoignages de nos lecteurs et abonnés qui ont partagé leur expérience avec notre journal. Voici ce qu'ils ont à dire :</p>
+        </div>
+    </div>
+
+    <!-- Liste des témoignages -->
+    {% if testimonials %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            {% for testimonial in testimonials %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ testimonial.author }}</h5>
+                        <p class="card-text fst-italic">"{{ testimonial.content }}"</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <p class="text-muted">Aucun témoignage disponible pour le moment.</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Formulaire de témoignage -->
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    Soumettez votre témoignage
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary mt-3">Envoyer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

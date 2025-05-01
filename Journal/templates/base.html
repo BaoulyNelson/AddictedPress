@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="{% static 'css/stylesHeader.css' %}" />
     <link rel="stylesheet" href="{% static 'css/stylesNavbar.css' %}" />
     <link rel="stylesheet" href="{% static 'css/stylesPanneau.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/footer.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/journal.css' %}" />
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon" />
 
     <!-- Contenu supplémentaire spécifique à chaque page -->
@@ -41,16 +41,19 @@
   {% include "partials/header.html" %}
 
   <body class="d-flex flex-column min-vh-100">
-    <!-- Inclusion du header -->
-    {% if messages %}
-    <div class="messages">
-      {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">
-          {{ message }}
-        </div>
-      {% endfor %}
-    </div>
-  {% endif %}
+ <!-- Inclusion du header -->
+{% if messages %}
+<div class="d-flex justify-content-center mt-3">
+  <div class="w-100" style="max-width: 600px;">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} text-center">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
   
    
     <!-- Main Content Block -->
