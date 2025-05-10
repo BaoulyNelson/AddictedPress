@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'AddictedPress.urls'
@@ -102,10 +104,17 @@ MESSAGE_TAGS = {
 }
 
 # Internationalization
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr'  # Langue par défaut
 TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_TZ = True
+
+USE_I18N = True       # Active la gestion des traductions
+USE_L10N = True       # (facultatif) Formate les nombres/dates selon la langue
+USE_TZ = True         # Gère les fuseaux horaires
+
+LANGUAGES = [
+    ('fr', 'Français'),
+    ('en', 'English'),
+]
 
 # Configuration email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

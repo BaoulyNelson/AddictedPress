@@ -1,23 +1,38 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const searchContainer = document.getElementById("searchContainer");
-    const searchInput = document.getElementById("searchInput");
+document.addEventListener('DOMContentLoaded', () => {
+  const searchContainer = document.getElementById('searchContainer');
+  const searchInput = document.getElementById('searchInput');
 
-    function toggleSearch() {
-        if (searchContainer.style.display === "none" || searchContainer.style.display === "") {
-            searchContainer.style.display = "block";
-            searchInput.focus(); // Met le curseur dans le champ
-        } else {
-            searchContainer.style.display = "none";
-        }
+  const toggleSearchContainer = () => {
+    searchContainer.classList.toggle('active');
+    if (searchContainer.classList.contains('active')) {
+      searchInput.focus();
     }
+  };
 
-    // Fermer si on clique en dehors
-    document.addEventListener("click", function (event) {
-        if (!searchContainer.contains(event.target) && !event.target.closest(".search-icon")) {
-            searchContainer.style.display = "none";
-        }
+  const largeSearchButton = document.querySelector('.search-icon-large');
+  const smallSearchButton = document.querySelector('.panel-search button');
+
+  if (largeSearchButton) {
+    largeSearchButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleSearchContainer();
     });
+  }
 
-    // Ajoute l'événement au clic sur l'icône
-    document.querySelector(".search-icon").addEventListener("click", toggleSearch);
+  if (smallSearchButton) {
+    smallSearchButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      toggleSearchContainer();
+    });
+  }
 });
+
+
+ document.addEventListener('DOMContentLoaded', () => {
+    const offcanvasEl = document.getElementById('offcanvasRight');
+    const searchInput = document.getElementById('searchInput');
+
+    offcanvasEl.addEventListener('shown.bs.offcanvas', () => {
+      searchInput.focus();
+    });
+  });

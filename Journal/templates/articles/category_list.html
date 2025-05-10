@@ -1,0 +1,326 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Parcourir les catégories{% endblock %}
+
+{% block styles %}
+<style>
+    .categories-header {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        padding: 4rem 0;
+        color: white;
+        margin-bottom: 3rem;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .categories-title {
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .categories-subtitle {
+        font-weight: 300;
+        font-size: 1.2rem;
+        opacity: 0.9;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+    
+    .category-card {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        height: 200px;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background-size: cover;
+        background-position: center;
+        text-decoration: none;
+    }
+    
+    .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, an 0, 0.15);
+    }
+    
+    .category-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%);
+        z-index: 1;
+    }
+    
+    .category-card:hover::before {
+        background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+    }
+    
+    .category-content {
+        position: relative;
+        z-index: 2;
+        padding: 1.5rem;
+        margin-top: auto;
+        color: white;
+    }
+    
+    .category-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .category-count {
+        font-size: 0.95rem;
+        opacity: 0.9;
+        display: flex;
+        align-items: center;
+    }
+    
+    .category-count i {
+        margin-right: 0.5rem;
+    }
+    
+    .category-icon {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background-color: rgba(255, 255, 255, 0.2);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        backdrop-filter: blur(5px);
+    }
+    
+    .featured-categories {
+        margin-bottom: 4rem;
+    }
+    
+    .section-title {
+        position: relative;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+        display: inline-block;
+    }
+    
+    .section-title::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 4px;
+        width: 60px;
+        background-color: #2575fc;
+        border-radius: 2px;
+    }
+    
+    .all-categories-section {
+        background-color: #f8f9fa;
+        padding: 3rem 0;
+        border-radius: 20px;
+    }
+    
+    .category-pill {
+        display: inline-block;
+        margin: 0 0.5rem 1rem 0;
+        padding: 0.6rem 1.2rem;
+        border-radius: 30px;
+        background-color: white;
+        color: #333;
+        text-decoration: none;
+        font-weight: 500;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+    
+    .category-pill:hover {
+        background-color: #2575fc;
+        color: white;
+        box-shadow: 0 5px 15px rgba(37, 117, 252, 0.3);
+    }
+    
+    .category-pill .badge {
+        background-color: #e9ecef;
+        color: #495057;
+        margin-left: 0.5rem;
+        font-weight: 600;
+        font-size: 0.75rem;
+    }
+    
+    .category-pill:hover .badge {
+        background-color: rgba(255, 255, 255, 0.3);
+        color: white;
+    }
+    
+    .no-categories {
+        text-align: center;
+        padding: 3rem;
+        background-color: #f8f9fa;
+        border-radius: 15px;
+    }
+    
+    .search-box {
+        position: relative;
+        margin-bottom: 2rem;
+    }
+    
+    .search-input {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        padding-right: 3rem;
+        border-radius: 30px;
+        border: 1px solid #dee2e6;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .search-input:focus {
+        box-shadow: 0 5px 15px rgba(37, 117, 252, 0.2);
+        border-color: #2575fc;
+    }
+    
+    .search-icon {
+        position: absolute;
+        right: 1.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #6c757d;
+    }
+    
+    /* Couleurs pour les catégories */
+    .color-1 { background-image: linear-gradient(135deg, #2193b0, #6dd5ed); }
+    .color-2 { background-image: linear-gradient(135deg, #f953c6, #b91d73); }
+    .color-3 { background-image: linear-gradient(135deg, #4facfe, #00f2fe); }
+    .color-4 { background-image: linear-gradient(135deg, #43cea2, #185a9d); }
+    .color-5 { background-image: linear-gradient(135deg, #ba8b02, #181818); }
+    .color-6 { background-image: linear-gradient(135deg, #ff9966, #ff5e62); }
+    .color-7 { background-image: linear-gradient(135deg, #7f7fd5, #86a8e7, #91eae4); }
+    .color-8 { background-image: linear-gradient(135deg, #654ea3, #eaafc8); }
+    
+    @media (max-width: 767px) {
+        .categories-header {
+            padding: 2.5rem 0;
+        }
+        
+        .categories-title {
+            font-size: 2rem;
+        }
+        
+        .category-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- En-tête de page -->
+<header class="categories-header text-center">
+    <div class="container">
+        <h1 class="categories-title">Explorez nos catégories</h1>
+        <p class="categories-subtitle">Découvrez tous nos articles classés par thématique pour faciliter votre navigation</p>
+    </div>
+</header>
+
+<div class="container">
+    <!-- Barre de recherche -->
+    <div class="search-box">
+        <input type="text" id="categorySearch" class="search-input" placeholder="Rechercher une catégorie...">
+        <i class="fas fa-search search-icon"></i>
+    </div>
+    
+    {% if categories %}
+        <!-- Catégories mises en avant (les 6 premières) -->
+        <section class="featured-categories">
+            <h2 class="section-title">Catégories populaires</h2>
+            
+            <div class="category-grid">
+                {% for cat in categories|slice:":6" %}
+    {% if cat %}
+        <a href="{% url 'articles_by_category' cat %}" class="category-card color-{{ forloop.counter }}">
+            <div class="category-icon">
+                <i class="fas {% cycle 'fa-laptop-code' 'fa-chart-line' 'fa-camera' 'fa-book' 'fa-comments' 'fa-briefcase' 'fa-paint-brush' 'fa-globe' %}"></i>
+            </div>
+            <div class="category-content">
+                <h3 class="category-name">{{ cat }}</h3>
+                <div class="category-count">
+                    <i class="fas fa-newspaper"></i>
+                    {{ cat.article_set.count|default:"0" }} article{{ cat.article_set.count|pluralize:"s" }}
+                </div>
+            </div>
+        </a>
+    {% endif %}
+{% endfor %}
+
+            </div>
+        </section>
+        
+        <!-- Toutes les catégories -->
+        <section class="all-categories-section">
+            <div class="container">
+                <h2 class="section-title">Toutes les catégories</h2>
+                
+                <div class="all-categories">
+                    {% for cat in categories %}
+                        <a href="{% url 'articles_by_category' cat %}" class="category-pill">
+                            {{ cat }}
+                            <span class="badge">{{ cat.article_set.count|default:"0" }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% else %}
+        <div class="no-categories">
+            <i class="fas fa-folder-open fa-3x mb-3 text-muted"></i>
+            <h3>Aucune catégorie disponible</h3>
+            <p class="text-muted">Les catégories seront ajoutées prochainement.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Recherche de catégories
+        const searchInput = document.getElementById('categorySearch');
+        const categoryPills = document.querySelectorAll('.category-pill');
+        
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                
+                categoryPills.forEach(pill => {
+                    const categoryName = pill.textContent.toLowerCase().trim();
+                    
+                    if (categoryName.includes(searchTerm)) {
+                        pill.style.display = 'inline-block';
+                    } else {
+                        pill.style.display = 'none';
+                    }
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}

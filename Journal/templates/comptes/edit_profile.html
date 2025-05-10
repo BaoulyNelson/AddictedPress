@@ -1,32 +1,259 @@
 {% extends "base.html" %}
 {% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Modifier votre profil{% endblock %}
 
 {% block styles %}
+<style>
+    .profile-header {
+        background-color: #f8f9fa;
+        border-radius: 0.5rem 0.5rem 0 0;
+        padding: 1.5rem;
+        border-bottom: 1px solid rgba(0,0,0,.125);
+    }
+    
+    .profile-card {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        border: none;
+        border-radius: 0.5rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        font-weight: 500;
+    }
+
+    .profile-avatar {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #fff;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    .profile-actions {
+        padding: 1rem 1.5rem;
+        background-color: #f8f9fa;
+        border-radius: 0 0 0.5rem 0.5rem;
+    }
+
+    .required-field::after {
+        content: "*";
+        color: red;
+        margin-left: 4px;
+    }
+
+    .invalid-feedback {
+        display: block;
+    }
+
+    .help-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg border-0 rounded-4">
+        <div class="col-lg-8">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Accueil</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'user_profile' %}">Mon profil</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Modifier</li>
+                </ol>
+            </nav>
+
+            <div class="profile-card">
+                <div class="profile-header d-flex align-items-center">
+                    <div class="me-4">
+                        {% if user.profile.avatar %}
+                            <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="profile-avatar">
+                        {% else %}
+                            <img src="{% static 'images/logo.jpg' %}" alt="Avatar par défaut" class="profile-avatar">
+                        {% endif %}
+                    </div>
+                    <div>
+                        <h2 class="mb-1">Modifier votre profil</h2>
+                        <p class="text-muted mb-0">Mettez à jour vos informations personnelles</p>
+                    </div>
+                </div>
+
                 <div class="card-body p-4">
-                    <h2 class="text-center mb-4">Modifier le profil</h2>
-                    <form method="POST" class="needs-validation" novalidate>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                         {% csrf_token %}
                         
-                        <div class="mb-3">
-                            {{ form.as_p }}
-                        </div>
-
-                        <div class="d-flex justify-content-between">
-                            <button type="submit" class="btn btn-primary">Mettre à jour</button>
-                            <a href="{% url 'user_profile' %}" class="btn btn-outline-secondary">Annuler</a>
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger mb-4">
+                                {% for error in form.non_field_errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ form.first_name.id_for_label }}" class="form-label required-field">Prénom</label>
+                                    {{ form.first_name|add_class:"form-control" }}
+                                    {% if form.first_name.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ form.first_name.errors }}
+                                        </div>
+                                    {% endif %}
+                                    {% if form.first_name.help_text %}
+                                        <small class="help-text">{{ form.first_name.help_text }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="{{ form.last_name.id_for_label }}" class="form-label required-field">Nom</label>
+                                    {{ form.last_name|add_class:"form-control" }}
+                                    {% if form.last_name.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ form.last_name.errors }}
+                                        </div>
+                                    {% endif %}
+                                    {% if form.last_name.help_text %}
+                                        <small class="help-text">{{ form.last_name.help_text }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
                         
-                    </form>
+                        <div class="form-group">
+                            <label for="{{ form.email.id_for_label }}" class="form-label required-field">Adresse email</label>
+                            {{ form.email|add_class:"form-control" }}
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback">
+                                    {{ form.email.errors }}
+                                </div>
+                            {% endif %}
+                            {% if form.email.help_text %}
+                                <small class="help-text">{{ form.email.help_text }}</small>
+                            {% endif %}
+                        </div>
+                        
+                        {% if form.username %}
+                            <div class="form-group">
+                                <label for="{{ form.username.id_for_label }}" class="form-label required-field">Nom d'utilisateur</label>
+                                {{ form.username|add_class:"form-control" }}
+                                {% if form.username.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.username.errors }}
+                                    </div>
+                                {% endif %}
+                                {% if form.username.help_text %}
+                                    <small class="help-text">{{ form.username.help_text }}</small>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        
+                        {% if form.bio %}
+                            <div class="form-group">
+                                <label for="{{ form.bio.id_for_label }}" class="form-label">Biographie</label>
+                                {{ form.bio|add_class:"form-control"|attr:"rows:4" }}
+                                {% if form.bio.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.bio.errors }}
+                                    </div>
+                                {% endif %}
+                                {% if form.bio.help_text %}
+                                    <small class="help-text">{{ form.bio.help_text }}</small>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        
+                        {% if form.avatar %}
+                            <div class="form-group">
+                                <label for="{{ form.avatar.id_for_label }}" class="form-label">Photo de profil</label>
+                                {{ form.avatar|add_class:"form-control" }}
+                                {% if form.avatar.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ form.avatar.errors }}
+                                    </div>
+                                {% endif %}
+                                {% if form.avatar.help_text %}
+                                    <small class="help-text">{{ form.avatar.help_text }}</small>
+                                {% else %}
+                                    <small class="help-text">Formats acceptés: JPG, PNG. Taille max: 2MB</small>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Champs supplémentaires du formulaire -->
+                        {% for field in form %}
+                            {% if field.name not in 'first_name,last_name,email,username,bio,avatar' %}
+                                <div class="form-group">
+                                    <label for="{{ field.id_for_label }}" class="form-label {% if field.field.required %}required-field{% endif %}">{{ field.label }}</label>
+                                    {{ field|add_class:"form-control" }}
+                                    {% if field.errors %}
+                                        <div class="invalid-feedback">
+                                            {{ field.errors }}
+                                        </div>
+                                    {% endif %}
+                                    {% if field.help_text %}
+                                        <small class="help-text">{{ field.help_text }}</small>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    
                 </div>
+                
+                <div class="profile-actions d-flex justify-content-between">
+                    <a href="{% url 'user_profile' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Annuler
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Enregistrer
+                    </button>
+                </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Preview de l'avatar
+    document.addEventListener('DOMContentLoaded', function() {
+        const avatarInput = document.querySelector('input[type="file"]');
+        if (avatarInput) {
+            avatarInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+                    const avatarImg = document.querySelector('.profile-avatar');
+                    
+                    reader.onload = function(e) {
+                        avatarImg.src = e.target.result;
+                    }
+                    
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

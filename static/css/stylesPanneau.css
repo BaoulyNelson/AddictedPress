@@ -1,60 +1,384 @@
-/* Panneau latéral */
-.sidebar {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: white;
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-    display: none; /* Masqué par défaut */
+:root {
+  --color-primary-blue: #227dea; /* Bleu principal (header) - Ajusté pour correspondre davantage */
+  --color-dark-blue: #227; /* Bleu foncé (top bar) */
+  --color-text-light: #ffffff;
+  --color-text-dark: #333333;
+  --color-text-muted: #777777;
+  --color-accent-yellow: #ffc107; /* Jaune pour "TICKET" et icône compte */
+  --color-panel-bg: #ffffff;
+  --color-panel-border: #eeeeee;
+  --color-panel-item-hover: #f8f8f8;
+  --font-sans-serif: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif-logo: "Georgia", Times, "Times New Roman", serif; /* Police générique pour le logo */
+  --breakpoint-large: 992px; /* Point de rupture pour les grands écrans */
 }
 
-/* Afficher le panneau latéral seulement sur les petits écrans */
-@media (max-width: 768px) {
-    .hamburger-icon {
-        display: block;
-        cursor: pointer;
-    }
-
-    /* Afficher uniquement les éléments spécifiés */
-    .hamburger-icon,
-    .header-title-container,
-    .login {
-        display: block;
-    }
-
-    /* Masquer la navigation principale et afficher le panneau latéral */
-    .main-nav {
-        display: none;
-    }
-
-    .sidebar {
-        display: block;
-    }
+body {
+  margin: 0;
+  font-family: var(--font-sans-serif);
+  background-color: #f4f4f4;
+  color: var(--color-text-dark);
+  line-height: 1.6;
 }
 
-/* Liens dans le panneau latéral */
-.sidebar a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 25px;
-    color: black;
+
+html{
+  overflow-x: hidden;
+}
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+}
+
+/* --- Styles pour Petits Écrans (Mobile First) --- */
+
+/* Top Bar: Cachée sur petits écrans */
+.top-bar {
+  display: none;
+}
+
+/* Main Header */
+.site-header {
+  background-color: var(--color-primary-blue);
+  color: var(--color-text-light);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.main-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Espace entre les éléments */
+  padding: 10px 0;
+  min-height: 50px; /* Hauteur minimale pour le header mobile */
+}
+
+.header-left-mobile {
+  display: flex; /* S'assurer que le bouton est bien aligné */
+  align-items: center;
+}
+
+.mobile-menu-toggle {
+  color: var(--color-text-light);
+  margin-right: 10px; /* Espace entre hamburger et bord/logo */
+}
+.mobile-menu-toggle svg {
+  width: 28px; /* Légèrement plus grand pour mobile */
+  height: 28px;
+}
+
+/* Icône de recherche pour grands écrans, cachée sur mobile */
+
+
+.logo-area {
+  text-align: center;
+  flex-grow: 1; /* Permet au logo de prendre l'espace central */
+}
+
+.language-switcher {
+  font-size: 0.7em; /* Plus petit sur mobile */
+  margin-bottom: 1px;
+  line-height: 1;
+}
+.language-switcher a {
+  color: var(--color-text-light);
+  opacity: 0.8;
+  padding: 0 3px;
+}
+.language-switcher a.active,
+.language-switcher a:hover {
+  opacity: 1;
+  font-weight: bold;
+}
+
+.logo {
+  font-family: var(--font-serif-logo);
+  font-size: 1.8em; /* Taille ajustée pour mobile */
+  font-weight: bold;
+  color: var(--color-text-light);
+  display: block;
+  line-height: 1.1;
+
+  font-family: 'UnifrakturCook', cursive;
+
+}
+
+.account-link-mobile {
+  display: flex; /* S'assurer que l'icône est bien alignée */
+  align-items: center;
+  margin-left: 10px; /* Espace entre logo et icône compte */
+}
+.account-link-mobile .account-icon {
+  width: 28px; /* Taille de l'icône compte sur mobile */
+  height: 28px;
+  fill: var(
+    --color-text-light
+  ); /* Couleur de l'icône compte sur mobile (pas jaune ici) */
+}
+/* Texte "MON COMPTE" caché sur mobile */
+.account-link-mobile .account-text {
+  display: none;
+}
+
+/* Main Navigation: Cachée sur petits écrans */
+.main-navigation {
+  display: none;
+}
+
+/* --- Mobile Side Panel (Image 3) --- */
+.mobile-side-panel {
+  position: fixed;
+  top: 0;
+  left: -100%; /* Caché par défaut */
+  width: 80%; /* Largeur du panneau */
+  max-width: 280px; /* Largeur maximale */
+  height: 100%;
+  background-color: var(--color-panel-bg);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  transition: left 0.3s ease-in-out;
+  z-index: 1000;
+  overflow-y: auto;
+  color: var(--color-text-dark);
+}
+.mobile-side-panel.active {
+  left: 0;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: flex-start;
+  padding: 15px;
+  border-bottom: 1px solid var(--color-panel-border);
+}
+.close-panel-button {
+  font-size: 1.2em; /* Taille de l'icône X */
+  color: var(--color-text-muted);
+}
+.close-panel-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.panel-search {
+  padding: 15px;
+  border-bottom: 1px solid var(--color-panel-border);
+}
+.panel-search button {
+  width: 100%;
+  padding: 10px 15px;
+  background-color: var(--color-primary-blue);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9em;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+.panel-search button svg {
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+}
+
+.panel-navigation ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.panel-navigation li a {
+  display: block;
+  padding: 12px 20px;
+  color: var(--color-text-dark);
+  border-bottom: 1px solid #f0f0f0; /* Ligne de séparation plus claire */
+  transition: background-color 0.2s ease;
+  font-size: 0.95em;
+}
+.panel-navigation li a:hover,
+.panel-navigation li a.active-item {
+  /* Pour simuler l'élément sélectionné "Emploi" */
+  background-color: var(--color-panel-item-hover);
+  color: var(--color-primary-blue); /* Couleur du texte au survol/actif */
+}
+.panel-navigation li:last-child a {
+  border-bottom: none;
+}
+/* Style spécifique pour "Emploi" comme dans l'image 3 */
+.panel-navigation li a[data-item="Emploi"] {
+  background-color: #e9ecef; /* Fond légèrement grisé pour l'élément actif */
+  font-weight: bold; /* Texte en gras pour l'élément actif */
+  color: var(--color-text-dark); /* Couleur de texte par défaut pour l'actif */
+}
+
+/* --- Styles pour Grands Écrans (Image 1) --- */
+@media (min-width: 992px) {
+  /* Afficher la Top Bar */
+  .top-bar {
     display: block;
-    transition: 0.3s;
+    background-color: var(--color-dark-blue);
+    color: var(--color-text-light);
+    padding: 8px 0;
+    font-size: 0.8em;
+  }
+  .top-bar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .top-bar-left a {
+    color: var(--color-text-light);
+    margin-right: 15px;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+  }
+  .top-bar-left a:hover {
+    opacity: 1;
+  }
+  .top-bar-right span {
+    opacity: 0.8;
+  }
+
+  /* Ajustements du Main Header pour grands écrans */
+  .main-header-content {
+    display: grid;
+    grid-template-columns: auto 1fr auto; /* Gauche, Centre (extensible), Droite */
+    align-items: center;
+    padding: 15px 0; /* Plus d'espace */
+    min-height: 70px;
+  }
+
+  .header-left-mobile {
+    /* Renommé pour clarté, devient header-left-desktop */
+    /* Contient hamburger et icône de recherche */
+    display: flex;
+    align-items: center;
+    justify-self: start; /* Aligner à gauche dans la grille */
+  }
+  .mobile-menu-toggle {
+    margin-right: 15px; /* Espace entre hamburger et recherche */
+    display: none;
+  }
+  .mobile-menu-toggle svg {
+    /* Taille standard pour desktop */
+    width: 24px;
+    height: 24px;
+  }
+
+  .search-icon-large {
+    display: inline-block; /* Afficher l'icône de recherche */
+    color: var(--color-text-light);
+  }
+  .search-icon-large svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .logo-area {
+    grid-column: 2 / 3; /* Occupe la colonne centrale */
+    text-align: center;
+    justify-self: center; /* Centrer horizontalement dans la cellule de la grille */
+    flex-grow: 0; /* Pas besoin de flex-grow avec grid */
+  }
+  .language-switcher {
+    font-size: 0.75em;
+  }
+  .logo {
+    font-size: 2.8em; /* Logo plus grand sur desktop */
+  }
+
+  .account-link-mobile {
+    /* Renommé pour clarté, devient account-link-desktop */
+    justify-self: end; /* Aligner à droite dans la grille */
+    display: flex;
+    align-items: center;
+  }
+  .account-link-mobile .account-icon {
+    width: 24px; /* Taille standard pour desktop */
+    height: 24px;
+    fill: var(--color-accent-yellow); /* Jaune comme sur l'image 1 */
+  }
+  .account-link-mobile .account-text {
+    display: inline; /* Afficher "MON COMPTE" */
+    margin-left: 8px;
+    font-size: 0.9em;
+    font-weight: bold;
+  }
+
+  /* Afficher la Main Navigation */
+  .main-navigation {
+    display: block;
+    background-color: var(--color-primary-blue);
+    border-top: 1px solid rgba(255, 255, 255, 0.15); /* Ligne de séparation plus subtile */
+  }
+  .main-navigation .container > ul {
+    /* Cibler l'ul direct du container */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center; /* Centrer les éléments de navigation */
+    flex-wrap: wrap;
+  }
+  .main-navigation li a {
+    display: block;
+    padding: 12px 13px; /* Ajustement du padding */
+    color: var(--color-text-light);
+    font-size: 0.85em; /* Taille de police pour la nav */
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+    font-weight: 500; /* Un peu moins gras que bold */
+  }
+  .main-navigation li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  .main-navigation .ticket-link {
+    background-color: var(--color-accent-yellow);
+    color: var(--color-text-dark);
+    font-weight: bold;
+    border-radius: 3px; /* Bordures arrondies pour le ticket */
+    margin-left: 5px;
+    padding: 8px 12px; /* Padding spécifique pour le ticket */
+    align-self: center; /* Pour bien l'aligner si la hauteur des li varie */
+  }
+  .main-navigation .ticket-link a {
+    /* S'assurer que le a à l'intérieur hérite bien */
+    color: var(--color-text-dark);
+    font-weight: bold;
+    padding: 0; /* Le padding est sur le li.ticket-link */
+  }
+  .main-navigation .ticket-link:hover {
+    background-color: #e6ac00;
+  }
+  .main-navigation .ticket-link a:hover {
+    background-color: transparent; /* Pas de changement de fond sur le a interne */
+  }
+
+  /* Cacher le panneau latéral mobile sur grands écrans (au cas où il serait resté ouvert) */
+  .mobile-side-panel {
+    display: none;
+  }
 }
 
-.sidebar a:hover {
-    color: #f1f1f1;
+/* Styles pour le contenu de la page (exemple) */
+main {
+  padding: 20px;
+  text-align: center;
 }
-
-/* Bouton de fermeture */
-.sidebar .close-btn {
-    position: absolute;
-    top: 0;
-    right: 35px;
-    margin-left: 50px;
+main h1 {
+  color: var(--color-primary-blue);
 }

@@ -7,14 +7,15 @@ from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login,authenticate,logout
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
-from .forms import TestimonialForm,ProfileForm ,ContactForm # Assurez-vous d'utiliser le bon formulaire
+from .forms import TestimonialForm,ProfileForm ,ContactForm,ArticleForm # Assurez-vous d'utiliser le bon formulaire
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.contrib.auth import login 
 from django.contrib import messages
 from django.contrib.messages import get_messages
 from Journal.utils import ajouter_message
-
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.utils.translation import gettext as _
 
 
 
@@ -87,10 +88,13 @@ def edit_profile(request):
         form = ProfileForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('index')  # Redirige vers la page d'accueil ou une autre page après la mise à jour
+            messages.success(request, "Votre profil a été mis à jour avec succès.")
+            return redirect('user_profile')
+        else:
+            messages.error(request, "Une erreur est survenue lors de la mise à jour du profil.")
     else:
         form = ProfileForm(instance=request.user)
-    
+
     return render(request, 'comptes/edit_profile.html', {'form': form})
 
 
@@ -112,8 +116,66 @@ def index(request):
     
     return render(request, 'index.html', context)
 
+def article_list(request):
+    articles = Article.objects.all()  # L'ordre est déjà défini dans Meta
+    return render(request, 'articles/article_list.html', {'articles': articles})
 
 
+def articles_by_category(request, category_name):
+    # Récupération des articles de la catégorie
+    articles_list = Article.objects.filter(category=category_name).order_by('-published_date')
+
+    # Pagination (5 articles par page)
+    paginator = Paginator(articles_list, 5)
+    page_number = request.GET.get('page')
+    articles = paginator.get_page(page_number)
+
+    # Contexte envoyé au template
+    context = {
+        'articles': articles,
+        'category': category_name
+    }
+
+    return render(request, 'articles/articles_by_category.html', context)
+
+
+def category_list(request):
+    categories = Article.objects.exclude(category='').values_list('category', flat=True).distinct()
+
+    return render(request, 'articles/category_list.html', {'categories': categories})
+
+
+def article_detail(request, id):  # Modifier article_id → id
+    article = get_object_or_404(Article, id=id)
+
+    # Récupérer les articles recommandés
+    recommended_articles = Article.objects.filter(category=article.category).exclude(id=article.id).order_by('-published_date')[:5]
+
+    return render(request, 'articles/article_detail.html', {
+        'article': article,
+        'recommended_articles': recommended_articles
+    })
+    
+    
+def is_staff_user(user):
+    return user.is_staff
+
+@login_required
+@user_passes_test(is_staff_user)
+def article_create(request):
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_article = form.save(commit=False)
+            new_article.author = request.user
+            new_article.save()
+            return redirect('index')
+    else:
+        form = ArticleForm()
+    return render(request, 'articles/article_form.html', {'form': form})
+
+
+  
 def about(request):
     return render(request, 'about.html')
 
@@ -151,35 +213,6 @@ def testimonials(request):
     return render(request, 'commentaires/testimonials.html')
 
 
-def articles_by_category(request, category_name):
-    # Récupération des articles de la catégorie
-    articles_list = Article.objects.filter(category=category_name).order_by('-published_date')
-
-    # Pagination (5 articles par page)
-    paginator = Paginator(articles_list, 5)
-    page_number = request.GET.get('page')
-    articles = paginator.get_page(page_number)
-
-    # Contexte envoyé au template
-    context = {
-        'articles': articles,
-        'category': category_name
-    }
-
-    return render(request, 'articles/articles_by_category.html', context)
-
-
-
-def article_detail(request, id):  # Modifier article_id → id
-    article = get_object_or_404(Article, id=id)
-
-    # Récupérer les articles recommandés
-    recommended_articles = Article.objects.filter(category=article.category).exclude(id=article.id).order_by('-published_date')[:5]
-
-    return render(request, 'articles/article_detail.html', {
-        'article': article,
-        'recommended_articles': recommended_articles
-    })
 
 
 
@@ -204,7 +237,6 @@ def search(request):
         'query': query
     }
     return render(request, 'search/search_results.html', context)
-
 
 
 

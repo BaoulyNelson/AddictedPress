@@ -1,6 +1,8 @@
 from django import forms
-from .models import Testimonial
+from .models import Testimonial,Article
 from django.contrib.auth.models import User
+
+
 
 
 class TestimonialForm(forms.ModelForm):
@@ -8,10 +10,9 @@ class TestimonialForm(forms.ModelForm):
         model = Testimonial
         fields = ['author', 'content']
         widgets = {
-            'content': forms.Textarea(attrs={'rows': 4}),
+            'author': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Votre nom'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Partagez votre expérience avec nous...'}),
         }
-
-
 
 # Formulaire pour mettre à jour le profil de l'utilisateur
 class ProfileForm(forms.ModelForm):
@@ -26,3 +27,7 @@ class ContactForm(forms.Form):
     email = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={'class': 'form-control'}))
     message = forms.CharField(label="Message", widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4}))
 
+class ArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ['title', 'content', 'category', 'image', 'image_url']

@@ -1,18 +1,40 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const navLinks = document.querySelectorAll('.main-nav a');
-    const sidebar = document.getElementById('sidebar');
+        const menuToggle = document.querySelector('.mobile-menu-toggle');
+        const closePanelButton = document.querySelector('.close-panel-button');
+        const mobileSidePanel = document.getElementById('mobileSidePanel');
+        // const body = document.body; // Décommenter si vous utilisez le blocage du scroll
 
-    navLinks.forEach(function(link) {
-        const clone = link.cloneNode(true);
-        sidebar.appendChild(clone);
-    });
-});
+        function openPanel() {
+            if (mobileSidePanel) {
+                mobileSidePanel.classList.add('active');
+            }
+            if (menuToggle) {
+                menuToggle.setAttribute('aria-expanded', 'true');
+            }
+            // Optionnel: empêcher le scroll du body quand le panneau est ouvert
+            // body.style.overflow = 'hidden';
+        }
 
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    if (sidebar.style.width === '50%') {
-        sidebar.style.width = '0';
-    } else {
-        sidebar.style.width = '50%';
-    }
-}
+        function closePanel() {
+            if (mobileSidePanel) {
+                mobileSidePanel.classList.remove('active');
+            }
+            if (menuToggle) {
+                menuToggle.setAttribute('aria-expanded', 'false');
+            }
+            // Optionnel: restaurer le scroll du body
+            // body.style.overflow = '';
+        }
+
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                if (mobileSidePanel && mobileSidePanel.classList.contains('active')) {
+                    closePanel();
+                } else {
+                    openPanel();
+                }
+            });
+        }
+
+        if (closePanelButton) {
+            closePanelButton.addEventListener('click', closePanel);
+        }

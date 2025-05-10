@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Articles Récents{% endblock %}
+
+{% block styles %}
+<style>
+    .article-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .article-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .article-image-container {
+        height: 220px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .article-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    
+    .article-card:hover .article-image {
+        transform: scale(1.05);
+    }
+    
+    .category-badge {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        border-radius: 30px;
+        padding: 5px 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        background-color: rgba(0, 123, 255, 0.9);
+        color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    .article-title {
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: #333;
+        line-height: 1.4;
+        font-size: 1.25rem;
+    }
+    
+    .article-meta {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+        color: #6c757d;
+        font-size: 0.85rem;
+    }
+    
+    .article-date {
+        display: flex;
+        align-items: center;
+    }
+    
+    .article-date i {
+        margin-right: 5px;
+    }
+    
+    .article-author {
+        display: flex;
+        align-items: center;
+        margin-left: 15px;
+    }
+    
+    .article-author i {
+        margin-right: 5px;
+    }
+    
+    .article-excerpt {
+        color: #6c757d;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+    
+    .read-more {
+        font-weight: 600;
+        text-decoration: none;
+        color: #0d6efd;
+        display: inline-flex;
+        align-items: center;
+        transition: color 0.3s ease;
+    }
+    
+    .read-more:hover {
+        color: #0a58ca;
+    }
+    
+    .read-more i {
+        margin-left: 5px;
+        font-size: 0.8rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .read-more:hover i {
+        transform: translateX(3px);
+    }
+    
+    .no-articles {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 3rem;
+        text-align: center;
+    }
+    
+    .page-title {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 2rem;
+        font-weight: 700;
+    }
+    
+    .page-title:after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background-color: #0d6efd;
+        border-radius: 2px;
+    }
+    
+    /* Pour le format masonry */
+    .masonry-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-gap: 1.5rem;
+    }
+    
+    @media (max-width: 767px) {
+        .masonry-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .article-image-container {
+            height: 180px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="page-title">Découvrez nos derniers articles</h2>
+    
+    {% if articles %}
+        <div class="masonry-grid">
+            {% for article in articles %}
+                <article class="article-card card">
+                    <div class="article-image-container">
+                        {% if article.image %}
+                            <img src="{{ article.image.url }}" class="article-image" alt="{{ article.title }}">
+                        {% elif article.image_url %}
+                            <img src="{{ article.image_url }}" class="article-image" alt="{{ article.title }}">
+                        {% else %}
+                            <img src="{% static 'images/default-article.jpg' %}" class="article-image" alt="{{ article.title }}">
+                        {% endif %}
+                        
+                        <span class="category-badge">{{ article.category }}</span>
+                    </div>
+                    
+                    <div class="card-body">
+                        <h3 class="article-title">{{ article.title }}</h3>
+                        
+                        <div class="article-meta">
+                            <div class="article-date">
+                                <i class="far fa-calendar-alt"></i>
+                                <span>{{ article.published_date|date:"d M Y" }}</span>
+                            </div>
+                            
+                            {% if article.author %}
+                                <div class="article-author">
+                                    <i class="far fa-user"></i>
+                                    <span>{{ article.author.get_full_name|default:article.author.username }}</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <p class="article-excerpt">
+                            {{ article.content|striptags|truncatewords:25 }}
+                        </p>
+                        
+                        <a href="{% url 'article_detail' article.id %}" class="read-more">
+                            Lire l'article <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+        
+        {% if is_paginated %}
+            <nav class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" aria-label="Première">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Précédente">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Suivante">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Dernière">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+        
+    {% else %}
+        <div class="no-articles">
+            <i class="fas fa-newspaper fa-3x mb-3 text-muted"></i>
+            <h3>Aucun article disponible pour le moment</h3>
+            <p class="text-muted">Revenez bientôt pour découvrir nos nouveaux contenus.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

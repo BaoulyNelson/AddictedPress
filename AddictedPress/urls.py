@@ -18,15 +18,20 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = [
-    path('admin/', admin.site.urls), 
-    path('', include('Journal.urls')), 
-   
+    # Pour permettre le changement de langue via POST / GET
+    path('i18n/', include('django.conf.urls.i18n')),
 ]
-# Ajouter la configuration pour les fichiers médias en développement
+
+# URLs principales avec support i18n (ex: /fr/, /en/)
+urlpatterns += i18n_patterns(
+    path('admin/', admin.site.urls),
+    path('', include('Journal.urls')),
+)
+
+# En mode développement : servir les fichiers médias
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
 

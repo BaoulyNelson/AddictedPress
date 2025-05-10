@@ -1,53 +1,143 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
 
 {% block content %}
-<div class="container py-5">
-    <!-- Section titre -->
-    <div class="row justify-content-center">
-        <div class="col-md-8 text-center">
-            <h2 class="text-primary mb-3">Témoignages</h2>
-            <p class="text-muted">Nous avons recueilli des témoignages de nos lecteurs et abonnés qui ont partagé leur expérience avec notre journal. Voici ce qu'ils ont à dire :</p>
-        </div>
-    </div>
+<style>
+    .testimonial-card {
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        height: 100%;
+    }
+    
+    .testimonial-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .testimonial-content {
+        position: relative;
+        padding: 25px;
+        font-style: italic;
+    }
+    
+    .testimonial-content::before {
+        content: '\201C';
+        font-size: 70px;
+        font-family: Georgia, serif;
+        color: rgba(0, 123, 255, 0.2);
+        position: absolute;
+        top: -10px;
+        left: 10px;
+    }
+    
+    .testimonial-author {
+        font-weight: bold;
+        margin-top: 15px;
+        color: #495057;
+    }
+    
+    .testimonial-section {
+        padding: 60px 0;
+        background-color: #f8f9fa;
+    }
+    
+    .section-title {
+        margin-bottom: 40px;
+        position: relative;
+        padding-bottom: 15px;
+    }
+    
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70px;
+        height: 3px;
+        background-color: #007bff;
+    }
+    
+    .form-container {
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        background-color: white;
+    }
+</style>
 
-    <!-- Liste des témoignages -->
-    {% if testimonials %}
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            {% for testimonial in testimonials %}
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ testimonial.author }}</h5>
-                        <p class="card-text fst-italic">"{{ testimonial.content }}"</p>
-                    </div>
-                </div>
-            {% endfor %}
+<!-- Section Formulaire Témoignage -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h2 class="section-title">Partagez votre expérience</h2>
+                <p class="lead mb-5">Nous serions ravis de connaître votre avis sur nos services.</p>
+            </div>
         </div>
-    </div>
-    {% else %}
-    <div class="row justify-content-center">
-        <div class="col-md-8 text-center">
-            <p class="text-muted">Aucun témoignage disponible pour le moment.</p>
-        </div>
-    </div>
-    {% endif %}
-
-    <!-- Formulaire de témoignage -->
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    Soumettez votre témoignage
-                </div>
-                <div class="card-body">
-                    <form method="post">
+        
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="form-container">
+                    <form method="post" action="{% url 'testimonials' %}">
                         {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit" class="btn btn-primary mt-3">Envoyer</button>
+                        <div class="mb-3">
+                            <label for="{{ form.author.id_for_label }}" class="form-label">Votre nom</label>
+                            {{ form.author|add_class:"form-control" }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.content.id_for_label }}" class="form-label">Votre témoignage</label>
+                            {{ form.content|add_class:"form-control" }}
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary px-4 py-2">Envoyer</button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- Section Témoignages -->
+<section class="testimonial-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h2 class="section-title">Ce que nos clients disent</h2>
+                <p class="lead mb-5">Découvrez les témoignages de personnes qui ont fait confiance à nos services.</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            {% for testimonial in testimonials %}
+            <div class="col-md-6 col-lg-4">
+                <div class="testimonial-card bg-white p-4">
+                    <div class="testimonial-content">
+                        <p>{{ testimonial.content }}</p>
+                    </div>
+                    <div class="d-flex align-items-center mt-3">
+                        <div class="flex-shrink-0">
+                            <div class="bg-primary rounded-circle d-flex justify-content-center align-items-center" style="width: 50px; height: 50px;">
+                                <span class="text-white fw-bold">{{ testimonial.author|first|upper }}</span>
+                            </div>
+                        </div>
+                        <div class="ms-3">
+                            <h5 class="testimonial-author mb-0">{{ testimonial.author }}</h5>
+                            <div>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
 {% endblock %}

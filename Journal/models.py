@@ -1,7 +1,7 @@
 # models.py
 from django.db import models
 from django.contrib.auth.models import User  # Pour l'auteur
-
+from django.utils.translation import gettext_lazy as _
 # Liste des choix de catégories
 CATEGORIE_CHOICES = [
     ('actualites', 'Actualités'),
@@ -13,7 +13,12 @@ CATEGORIE_CHOICES = [
     ('national', 'National'),
     ('opinions', 'Opinions'),
     ('societe', 'Société'),
+    ('a_la_une', 'À la une'),  # Ajouté pour correspondre au lien
+    ('a_la_minute', 'À la minute'),  # Ajouté pour correspondre au lien
+    ('emploi', 'Emploi'),  # Ajouté pour correspondre au lien
+    ('internationale', 'Internationale'),  # Ajouté pour correspondre au lien
 ]
+
 
 class Article(models.Model):
     title = models.CharField(max_length=200)

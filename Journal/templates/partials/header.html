@@ -1,86 +1,164 @@
-{% load static %}
+<header class="site-header">
+  <!-- Top bar: visible uniquement sur grands écrans (géré par CSS) -->
+  <div class="top-bar">
+    <div class="container top-bar-content">
+      <div class="top-bar-left">
+        <a href="{% url 'about' %}">À Propos</a>
+        <a href="{% url 'contact' %}">Contact</a>
+        <a href="{% url 'testimonials' %}">Témoignages</a>
 
-<link rel="stylesheet" href="{% static 'css/header.css' %}">
-<script src="{% static 'js/header.js' %}" defer></script>
+      </div>
+      <div class="top-bar-right">
+        <span id="date-time"></span>
 
-<div class="top-header">
-  <div class="top-nav">
-    <a href="{% url 'about' %}">À Propos</a>
-    <a href="{% url 'contact' %}">Contact</a>
-    <a href="{% url 'testimonials' %}">Témoignages</a>
-    
-</div>
-
-  <div class="date-time" id="date-time"></div>
-</div>
-
-<header>
-  <div class="header-content">
-    <i class="fas fa-bars hamburger-icon" onclick="toggleSidebar()"></i>
-    <div class="search-icon" onclick="toggleSearch()">
-      <i class="fas fa-search"></i>
+      </div>
+    </div>
   </div>
-  
-  
-    
-    <div class="header-title-container">
-      <h1>Addicted Press</h1>
-    </div>
 
+  <!-- Main header section -->
+  <div class="main-header">
+    <div class="main-header-content container">
+      <div class="header-left-mobile">
+        <!-- Nom de classe ajusté pour clarté, s'applique aux deux vues mais change de contenu -->
+        <button class="mobile-menu-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <!-- Icône de recherche pour grands écrans, gérée par CSS -->
+<button class="search-icon-large" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="8"></circle>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</button>
 
-    {% if user.is_authenticated %}
-    {% if user.is_superuser %}
-        <!-- Interface pour les superutilisateurs (administrateurs) -->
-        <div class="login">
-            <a href="{% url 'admin:index' %}" title="Accéder à l'interface admin" style="color: #fff; text-decoration: none">
-                <i class="fas fa-user" style="color: #fff"></i> 
-            </a>
+      </div>
+
+      <div class="logo-area">
+        <div class="language-switcher">
+           <a href="/fr/" class="lang-fr {% if LANGUAGE_CODE == 'fr' %}active{% endif %}">FRANÇAIS</a> |
+            <a href="/en/" class="lang-en {% if LANGUAGE_CODE == 'en' %}active{% endif %}">ENGLISH</a>
+
         </div>
-    {% else %}
-        <!-- Interface pour les utilisateurs connectés (non admin) -->
-        <div class="login">
-            <a href="{% url 'user_profile' %}" title="Voir votre profil" style="color: #fff; text-decoration: none">
-                <i class="fas fa-user-circle" style="color: #fff"></i> 
-            </a>
-        </div>
-    {% endif %}
+        <a href="/" class="logo">Addicted Press</a>
+      </div>
+
+      <!-- Liens en fonction du statut de l'utilisateur -->
+{% if user.is_authenticated %}
+  {% if user.is_superuser %}
+    <a href="{% url 'admin:index' %}" class="account-link-mobile" title="Interface admin">
+      <svg class="account-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+      </svg>
+      <span class="account-text">Admin</span>
+    </a>
+
+  {% elif user.is_staff %}
+    <a href="{% url 'article_create' %}" class="account-link-mobile" title="Ajouter un article">
+      <svg class="account-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 11H13V5h-2v6H5v2h6v6h2v-6h6z"/>
+      </svg>
+      <span class="account-text">Ajouter</span>
+    </a>
+    <a href="{% url 'user_profile' %}" class="account-link-mobile" title="Votre profil">
+      <svg class="account-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+      </svg>
+      <span class="account-text">Mon compte</span>
+    </a>
+
+  {% else %}
+    <a href="{% url 'user_profile' %}" class="account-link-mobile" title="Votre profil">
+      <svg class="account-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+      </svg>
+      <span class="account-text">Mon compte</span>
+    </a>
+  {% endif %}
+
 {% else %}
-    <!-- Interface pour les utilisateurs non authentifiés -->
-    <div class="login">
-        <a href="{% url 'login' %}" title="Connexion" style="color: #fff; text-decoration: none">
-            <i class="fas fa-user-plus" style="color: #fff"></i> 
-        </a>
-    </div>
+  <a href="{% url 'login' %}" class="account-link-mobile" title="Connexion">
+    <svg class="account-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+    </svg>
+    <span class="account-text">Connexion</span>
+  </a>
 {% endif %}
 
-
+    </div>
   </div>
-<!-- Formulaire de recherche (initialement caché) -->
-<div class="search-container" id="searchContainer" style="display: none;">
-  <form id="searchForm" action="{% url 'search_by_category' %}" method="get">
-      <input type="search" name="q" id="searchInput" placeholder="Rechercher par catégorie...">
-      <button type="submit" id="searchSubmit">Rechercher</button>
-  </form>
-  <div id="searchResults"></div>
-</div>
 
-  <nav class="main-nav">
-    <a href="{% url 'index' %}">Accueil</a>
+  <!-- Navigation pour grands écrans (gérée par CSS) -->
+  <nav class="main-navigation">
+    <div class="container">
+      <ul>
 
-    <a href="{% url 'articles_by_category' 'Culture' %}">Culture</a>
-    <a href="{% url 'articles_by_category' 'Economie' %}">Economie</a>
-    <a href="{% url 'articles_by_category' 'Sport' %}">Sport</a>
-    <a href="{% url 'articles_by_category' 'Editorial' %}">Editorial</a>
-    <a href="{% url 'articles_by_category' 'National' %}">National</a>
-    <a href="{% url 'articles_by_category' 'Opinions' %}">Opinions</a>
-    <a href="{% url 'articles_by_category' 'Société' %}">Société</a>
-    
-    <a href="{% url 'articles_by_category' 'Annonces' %}">Annonces</a>
+        <li><a href="{% url 'index' %}">Accueil</a></li>
+        <li><a href="{% url 'articles_by_category' 'Culture' %}">Culture</a></li>
+        <li><a href="{% url 'articles_by_category' 'Economie' %}">Economie</a></li>
+        <li><a href="{% url 'articles_by_category' 'Sport' %}">Sport</a></li>
+        <li><a href="{% url 'articles_by_category' 'Éditorial' %}">Éditorial</a></li>
 
+        <li><a href="{% url 'articles_by_category' 'National' %}">National</a></li>
+        <li><a href="{% url 'articles_by_category' 'Opinions' %}">Opinions</a></li>
+        <li><a href="{% url 'articles_by_category' 'Société' %}">Société</a></li>
+        <li><a href="{% url 'articles_by_category' 'Annonces' %}">Annonces</a></li>
+
+      </ul>
+    </div>
   </nav>
 </header>
 
-<div class="sidebar" id="sidebar">
-  <a href="#" class="close-btn" onclick="toggleSidebar()">&times;</a>
-  <!-- Les liens seront insérés ici dynamiquement -->
+<!-- Offcanvas à droite (formulaire de recherche) -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasRightLabel">Recherche par catégorie</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <form id="searchForm" action="{% url 'search_by_category' %}" method="get" class="d-flex gap-2 align-items-end">
+  <div class="flex-grow-1">
+    <label for="searchInput" class="form-label">Tapez votre recherche</label>
+    <input type="search" name="q" id="searchInput" class="form-control" placeholder="Rechercher...">
+  </div>
+  <div>
+    <label class="form-label invisible d-block">Rechercher</label>
+    <button type="submit" class="btn btn-primary">Rechercher</button>
+  </div>
+</form>
+
+    <div id="searchResults"></div>
+  </div>
+</div>
+
+
+<!-- Panneau latéral mobile -->
+<div class="mobile-side-panel" id="mobileSidePanel">
+  <div class="panel-header">
+    <button class="close-panel-button" aria-label="Fermer le menu" aria-expanded="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+<div class="panel-search">
+  <button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    Recherche
+  </button>
+</div>
+
+  <nav class="panel-navigation">
+    <ul>
+ {% include "partials/navigation_categories.html" %}
+
+    </ul>
+  </nav>
 </div>

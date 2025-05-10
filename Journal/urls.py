@@ -52,13 +52,17 @@ urlpatterns = [
     path("contact/success/", views.contact_success_view, name="contact_success"),
 
     path('testimonials/', views.testimonials, name='testimonials'),
-   
+    path('articles/', views.article_list, name='article_list'),
+    
+
     # Route pour afficher les articles d'une catégorie spécifique
     path('category/<str:category_name>/', views.articles_by_category, name='articles_by_category'),
-    
+    path('articles/categories/', views.category_list, name='category_list'),
+
     # Détail d'un article spécifique par son ID
     path('article/<int:id>/', views.article_detail, name='article_detail'), 
-    
+     path('article/new/', views.article_create, name='article_create'),
+
     # Route pour effectuer une recherche par catégorie
     path('search_by_category/', views.search, name='search_by_category'),
   

@@ -1,73 +1,39 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}{{ article.title }}{% endblock %}
 
 {% block styles %}
-<link rel="stylesheet" href="{% static 'css/articles.css' %}">
+<link rel="stylesheet" href="{% static 'css/article_detail.css' %}">
 {% endblock %}
-
-{% block title %}{{ article.title }} - addictedpress.com{% endblock %}
-
-{% block og_title %}{{ article.title }}{% endblock %}
-{% block og_description %}{{ article.description|default:"Découvrez cet article passionnant sur addictedpress.com" }}{% endblock %}
-{% block og_image %}
-    {% if article.image %}
-        {{ article.image.url }}
-    {% elif article.image_url %}
-        {{ article.image_url }}
-    {% else %}
-        {% static 'images/logo.jpg' %}
-    {% endif %}
-{% endblock %}
-{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}
 
 {% block content %}
-<div class="container">
-  <!-- Colonne principale -->
-  <div class="main-content">
-      <div class="featured-article">
-          <h1>{{ article.title }}</h1>
+<div class="container mt-5 mb-5">
+  <div class="article-detail mx-auto p-4 shadow-sm bg-white rounded" style="max-width: 800px;">
 
-          {% if article.image %}
-              <img src="{{ article.image.url }}" alt="{{ article.title }}">
-          {% elif article.image_url %}
-              <img src="{{ article.image_url }}" alt="{{ article.title }}">
-          {% endif %}
+    <!-- Titre -->
+    <h1 class="mb-3">{{ article.title }}</h1>
 
-          <p>{{ article.content|safe }}</p>
-      </div>
+    <!-- Date -->
+    <p class="text-muted mb-4">Publié le {{ article.published_date|date:"j F Y" }}</p>
 
-      <small>
-          Par <strong>{{ article.author }}</strong> • Publié le {{ article.published_date|date:"d M Y H:i" }}
-      </small>
+    <!-- Image -->
+    {% if article.image %}
+    <img src="{{ article.image.url }}" alt="{{ article.title }}" class="img-fluid rounded mb-4 w-100" style="max-height: 400px; object-fit: cover;">
+    {% endif %}
 
-      <div class="back-button">
-          <a href="{% url 'articles_by_category' article.category %}">Retour à la catégorie</a>
-      </div>
+    <!-- Contenu -->
+    <div class="article-content" style="line-height: 1.7; font-size: 1.1rem;">
+      {{ article.content|safe }}
+    </div>
+  {% if article.author %}par <strong>{{ article.author.get_full_name|default:article.author.username }}</strong>{% endif %}
+    <!-- Bouton retour -->
+    <div class="mt-5">
+      <a href="{% url 'index' %}" class="btn btn-outline-primary">
+        &larr; Retour à l’accueil
+      </a>
+    </div>
+
   </div>
-
-  <!-- Colonne latérale -->
-  <aside class="articles-sidebar">
-      <h2>Lire également</h2>
-      {% if recommended_articles %}
-          {% for recommended_article in recommended_articles %}
-              <div class="article">
-                  {% if recommended_article.image %}
-                      <img src="{{ recommended_article.image.url }}" alt="{{ recommended_article.title }}">
-                  {% elif recommended_article.image_url %}
-                      <img src="{{ recommended_article.image_url }}" alt="{{ recommended_article.title }}">
-                  {% else %}
-                      <img src="{% static 'images/default.jpg' %}" alt="Image par défaut">
-                  {% endif %}
-                  <div>
-                      <h3><a href="{% url 'article_detail' recommended_article.id %}">{{ recommended_article.title }}</a></h3>
-                  </div>
-              </div>
-          {% endfor %}
-      {% else %}
-          <p>Aucun article recommandé pour le moment.</p>
-      {% endif %}
-  </aside>
 </div>
-
 {% endblock %}

@@ -1,63 +1,60 @@
-    <!-- Footer -->
-    <footer>
-      <div class="container">
-          <div class="footer-container">
-              <div class="footer-column">
-                  <h3>addictedpress.com</h3>
-                  <p>L'information qui compte, quand elle compte. Notre mission est de vous fournir une information
-                      fiable, vérifiée et accessible.</p>
-                  <div class="social-links">
-                      <a href="#"><i class="fab fa-facebook-f"></i></a>
-                      <a href="#"><i class="fab fa-twitter"></i></a>
-                      <a href="#"><i class="fab fa-instagram"></i></a>
-                      <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                      <a href="#"><i class="fab fa-youtube"></i></a>
-                  </div>
-              </div>
-
-              <div class="footer-column">
-                  <h3>Rubriques</h3>
-                  <ul class="footer-links">
-                      <li><a href="{% url 'articles_by_category' 'Culture' %}">Culture</a></li>
-                      <li><a href="{% url 'articles_by_category' 'Economie' %}">Économie</a></li>
-                      <li><a href="{% url 'articles_by_category' 'Sport' %}">Sport</a></li>
-                      <li><a href="{% url 'articles_by_category' 'Edditorial' %}">Edditorial</a></li>
-                      <li><a href="{% url 'articles_by_category' 'National' %}">National</a></li>
-                      <li><a href="{% url 'articles_by_category' 'Opinion' %}">Opinions</a></li>
-                  </ul>
-              </div>
-
-              <div class="footer-column">
-                  <h3>Services</h3>
-                  <ul class="footer-links">
-                      <li><a href="#">Application mobile</a></li>
-                      <li><a href="#">Podcasts</a></li>
-                      <li><a href="#">Newsletter</a></li>
-                      <li><a href="#">Alertes info</a></li>
-                      <li><a href="#">Flux RSS</a></li>
-                  </ul>
-              </div>
-
-              <div class="footer-column">
-                  <h3>À propos</h3>
-                  <ul class="footer-links">
-                   
-                      <li><a href="{% url 'about' %}">Notre équipe</a></li>
-                      <li><a href="{% url 'contact' %}">Nous contacter</a></li>
-                      <li><a href="{% url 'about' %}">Recrutement</a></li>
-                      <li><a href="{% url 'about' %}">Mentions légales</a></li>
-                      <li><a href="{% url 'about' %}">Politique de confidentialité</a></li>
-                  </ul>
-              </div>
-          </div>
-
-          <div class="copyright">
-            &copy; <span id="currentYear"></span> AddictedPress. Tous droits réservés.
+<!-- Footer -->
+  <footer class="bg-dark text-white pt-4">
+  <div class="container py-4">
+    <div class="row text-center text-md-start">
+      <div class="col-12 col-md-3 mb-4">
+        <h3>addictedPress</h3>
+        <p>L'information qui compte, quand elle compte. Notre mission est de vous fournir une information fiable, vérifiée et accessible.</p>
+        <div class="d-flex justify-content-center justify-content-md-start gap-2">
+          <a href="#"><i class="fab fa-facebook-f"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
         </div>
-        
-        <script>
-          document.getElementById("currentYear").textContent = new Date().getFullYear();
-        </script>
-        
       </div>
-  </footer>
+
+      <div class="col-12 col-md-3 mb-4">
+        <h3>Rubriques</h3>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'articles_by_category' 'Culture' %}">Culture</a></li>
+          <li><a href="{% url 'articles_by_category' 'Economie' %}">Économie</a></li>
+          <li><a href="{% url 'articles_by_category' 'Sport' %}">Sport</a></li>
+          <li><a href="{% url 'articles_by_category' 'Edditorial' %}">Edditorial</a></li>
+          <li><a href="{% url 'articles_by_category' 'National' %}">National</a></li>
+          <li><a href="{% url 'articles_by_category' 'Opinion' %}">Opinions</a></li>
+        </ul>
+      </div>
+
+      <div class="col-12 col-md-3 mb-4">
+        <h3>Services</h3>
+        <ul class="list-unstyled">
+          <li><a href="#">Application mobile</a></li>
+          <li><a href="#">Podcasts</a></li>
+          <li><a href="#">Newsletter</a></li>
+          <li><a href="#">Alertes info</a></li>
+          <li><a href="#">Flux RSS</a></li>
+        </ul>
+      </div>
+
+      <div class="col-12 col-md-3 mb-4">
+        <h3>À propos</h3>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'about' %}">Notre équipe</a></li>
+          <li><a href="{% url 'contact' %}">Nous contacter</a></li>
+          <li><a href="{% url 'about' %}">Recrutement</a></li>
+          <li><a href="{% url 'about' %}">Mentions légales</a></li>
+          <li><a href="{% url 'about' %}">Politique de confidentialité</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      &copy; <span id="currentYear"></span> AddictedPress. Tous droits réservés.
+    </div>
+
+    <script>
+      document.getElementById("currentYear").textContent = new Date().getFullYear();
+    </script>
+  </div>
+</footer>
